@@ -7,14 +7,9 @@ import {
   DialogContent,
   DialogContentText,
   Button,
-  TextField,
   Grid,
-  FormControlLabel,
-  RadioGroup,
-  Radio,
   MenuItem,
   Select,
-  InputLabel,
 } from "@material-ui/core";
 import AuthContext from "../../AuthContext";
 
@@ -25,20 +20,20 @@ function UserRemoveDialog({ children, ...props }) {
   const [selectedUser, setSelectedUser] = React.useState('');
   const token = React.useContext(AuthContext);
 
-  function fetchUserData() {
-    axios
-      .get('/users/all', {
-        params: {
-          token,
-        },
-      })
-      .then(({ data }) => {
-        setUsers(data['users']);
-      })
-      .catch((err) => { });
-  }
-
   React.useEffect(() => {
+    function fetchUserData() {
+      axios
+        .get('/users/all', {
+          params: {
+            token,
+          },
+        })
+        .then(({ data }) => {
+          setUsers(data['users']);
+        })
+        .catch((err) => { });
+    }
+
     fetchUserData();
   }, []);
 
