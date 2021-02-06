@@ -52,8 +52,8 @@ export default function NotificationList() {
         {notifs.length === 0
           ? <>&nbsp;You don't have any notifications.&nbsp;</>
           : notifs.map((notif) => (
-            <MenuItem key={notif.notif_id} component={Link} to={`/channel/${notif.ch}`}>
-              {notif.notif_msg}
+            <MenuItem component={Link} to={`/channel/${notif.channel_id}`}>
+              {notif.notification_message}
             </MenuItem>
           ))}
         <MenuItem onClick={handleClose}>Close</MenuItem>
