@@ -13,7 +13,7 @@ import {
   TextField,
 } from '@material-ui/core';
 import AuthContext from '../../AuthContext';
-import {useStep} from '../../utils/update';
+import { useStep } from '../../utils/update';
 
 function AddMemberDialog({ channel_id, ...props }) {
   const [open, setOpen] = React.useState(false);
@@ -27,24 +27,24 @@ function AddMemberDialog({ channel_id, ...props }) {
 
   function fetchUserData() {
     axios
-    .get('/users/all', {
-      params: {
-        token,
-      },
-    })
-    .then(({ data }) => {
-      setUsers(data['users']);
-    })
-    .catch((err) => {});
+      .get('/users/all', {
+        params: {
+          token,
+        },
+      })
+      .then(({ data }) => {
+        setUsers(data['users']);
+      })
+      .catch((err) => { });
   }
 
   React.useEffect(() => {
-      fetchUserData();
+    fetchUserData();
   }, []);
 
   const handleUserSelect = event => {
-      const newUserId = parseInt(event.target.value,10);
-      setSelectedUser(newUserId);
+    const newUserId = parseInt(event.target.value, 10);
+    setSelectedUser(newUserId);
   };
 
   function handleClickOpen() {
@@ -68,7 +68,7 @@ function AddMemberDialog({ channel_id, ...props }) {
         console.log(response);
         step();
       })
-      .catch((err) => {});
+      .catch((err) => { });
   }
   return (
     <div>
@@ -84,9 +84,9 @@ function AddMemberDialog({ channel_id, ...props }) {
         <form onSubmit={handleSubmit}>
           <DialogContent>
             <DialogContentText>
-              Enter a user id below to invite a user to this channel
+              Select a user below to invite them to this channel
             </DialogContentText>
-            <Select style={{width:"100%"}} id="u_id" onChange={handleUserSelect} value={selectedUser}>
+            <Select style={{ width: "100%" }} id="u_id" onChange={handleUserSelect} value={selectedUser}>
               {users.map((d, idx) => {
                 return <MenuItem key={d.u_id} value={d.u_id}>{d.name_first} {d.name_last}</MenuItem>
               })}
