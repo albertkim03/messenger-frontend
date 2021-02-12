@@ -70,7 +70,7 @@ function Header({ handleMenuToggle = () => { } }) {
             </IconButton>
             <Link to="/" style={{ color: 'white', textDecoration: 'none' }}>
               <Typography variant="h5" noWrap>
-                flockr
+                Dreams
               </Typography>
             </Link>
           </>

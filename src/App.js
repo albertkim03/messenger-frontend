@@ -18,7 +18,7 @@ import { AuthProvider } from './AuthContext';
 import './axios';
 
 function App() {
-  document.title = 'flockr';
+  document.title = 'UNSW Dreams';
 
   const [authDetails, setAuthDetails] = React.useState(
     localStorage.getItem('token')

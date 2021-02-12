@@ -59,7 +59,7 @@ function SideMenu({ container, children, open, setOpen }) {
           <div className={classes.toolbar}>
             <Link to="/" style={{ color: 'black', textDecoration: 'none' }}>
               <Typography variant="h5" noWrap>
-                flockr
+                Dreams
               </Typography>
             </Link>
           </div>
