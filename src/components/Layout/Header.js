@@ -16,6 +16,7 @@ import { drawerWidth } from '../../utils/constants';
 import PollToggle from '../PollToggle';
 import Admin from '../Admin';
 import SearchBar from '../Search/SearchBar';
+import NotificationList from '../NotificationList';
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -35,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Header({ handleMenuToggle = () => {} }) {
+function Header({ handleMenuToggle = () => { } }) {
   const classes = useStyles();
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up('sm'));
@@ -47,7 +48,7 @@ function Header({ handleMenuToggle = () => {} }) {
       .then((response) => {
         console.log(response);
       })
-      .catch((err) => {});
+      .catch((err) => { });
     localStorage.removeItem('token');
     localStorage.removeItem('u_id');
     return <Redirect to="/login" />;
@@ -77,9 +78,10 @@ function Header({ handleMenuToggle = () => {} }) {
         <div variant="h6" className={classes.title}>
 
         </div>
-        <div style={{display:'flex'}}>
+        <div style={{ display: 'flex' }}>
           <SearchBar />
           <PollToggle />
+          <NotificationList />
           <Admin />
           <Button
             color="inherit"
