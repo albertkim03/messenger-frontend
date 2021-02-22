@@ -11,7 +11,7 @@ import SendIcon from '@material-ui/icons/Send';
 import TimerIcon from '@material-ui/icons/Timer';
 import { makeStyles } from '@material-ui/styles';
 import AuthContext from '../../AuthContext';
-import {StepContext} from '../Channel/ChannelMessages';
+import { StepContext } from '../Channel/ChannelMessages';
 import AddMessageTimerDialog from './AddMessageTimerDialog';
 import { useInterval } from '../../utils';
 import { useStep } from '../../utils/update';
@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
 
 const TIMER_INACTIVE_VALUE = -1;
 
-function AddMessage({ channel_id = '' }) {
+function AddMessage({ channel_id = '', dm_id = '' }) {
 
   const classes = useStyles();
   const [currentMessage, setCurrentMessage] = React.useState('');
@@ -49,7 +49,7 @@ function AddMessage({ channel_id = '' }) {
   const [timerDialogOpen, setTimerDialogOpen] = React.useState(false);
   const token = React.useContext(AuthContext);
   let onAdd = React.useContext(StepContext);
-  onAdd = onAdd ? onAdd : () => {}; // sanity check
+  onAdd = onAdd ? onAdd : () => { }; // sanity check
 
   const isTimerSet = currentTimer !== TIMER_INACTIVE_VALUE;
 
@@ -66,7 +66,7 @@ function AddMessage({ channel_id = '' }) {
      * note: probably makes sense that this takes precedence over
      *       starting a standup.
      */
-    if (standupRemaining && standupRemaining > 0) {
+    if (dm_id === '' && standupRemaining && standupRemaining > 0) {
       axios.post(`/standup/send`, {
         token,
         channel_id: Number.parseInt(channel_id),
@@ -76,7 +76,7 @@ function AddMessage({ channel_id = '' }) {
           console.log(data);
           onAdd();
         })
-        .catch((err) => {});
+        .catch((err) => { });
       return;
     }
 
@@ -84,16 +84,18 @@ function AddMessage({ channel_id = '' }) {
      * Sending a message when the sendlater timer has been set
      */
     if (isTimerSet) {
-      axios.post(`/message/sendlater`, {
+      const route = dm_id === '' ? '/message/sendlater' : 'message/sendlaterdm';
+      axios.post(route, {
         token,
         channel_id: Number.parseInt(channel_id),
+        dm_id: Number.parseInt(dm_id),
         message,
         time_sent: (currentTimer.getTime() / 1000), // ms to s conversion
       })
         .then(({ data }) => {
           console.log(data);
         })
-        .catch((err) => {});
+        .catch((err) => { });
       setCurrentTimer(TIMER_INACTIVE_VALUE);
       return;
     }
@@ -101,7 +103,7 @@ function AddMessage({ channel_id = '' }) {
     /**
      * Starting a standup (any message which starts with /standup)
      */
-    if (message.startsWith('/standup')) {
+    if (dm_id === '' && message.startsWith('/standup')) {
       const re = /\/standup\s+([1-9][0-9]*)/;
       const found = message.match(re);
       if (!found || found.length < 2) {
@@ -121,7 +123,7 @@ function AddMessage({ channel_id = '' }) {
               setStandupEndTime(time_finish);
               alert(`You've started a standup for ${length} seconds`);
             })
-            .catch((err) => {});
+            .catch((err) => { });
         }
       }
       return;
@@ -130,21 +132,23 @@ function AddMessage({ channel_id = '' }) {
     /**
      * Default message sending behaviour
      */
+    const route = dm_id === '' ? '/message/send' : 'message/senddm';
     axios.post(`/message/send`, {
       token,
       channel_id: Number.parseInt(channel_id),
+      dm_id: Number.parseInt(dm_id),
       message,
     })
       .then(({ data }) => {
         console.log(data);
         onAdd();
       })
-      .catch((err) => {});
+      .catch((err) => { });
   };
 
   useInterval(() => {
-    if (standupEndTime > Date.now()/1000) {
-      setStandupRemaining(() => Math.round(standupEndTime - Math.round(Date.now()/1000)));
+    if (standupEndTime > Date.now() / 1000) {
+      setStandupRemaining(() => Math.round(standupEndTime - Math.round(Date.now() / 1000)));
     } else {
       setStandupRemaining()
     }
@@ -153,14 +157,14 @@ function AddMessage({ channel_id = '' }) {
   const checkStandupActive = () => {
     if (standupRemaining > 0) return;
     axios
-    .get('/standup/active', { params: { token, channel_id } })
-    .then(({ data }) => {
-      const { is_active = false, time_finish } = data;
-      if (is_active && time_finish) {
-        setStandupEndTime(time_finish);
-      }
-    })
-    .catch((err) => {});
+      .get('/standup/active', { params: { token, channel_id } })
+      .then(({ data }) => {
+        const { is_active = false, time_finish } = data;
+        if (is_active && time_finish) {
+          setStandupEndTime(time_finish);
+        }
+      })
+      .catch((err) => { });
   }
 
   const step = useStep(checkStandupActive, [currentMessage] /* check when user is typing */);
@@ -183,7 +187,6 @@ function AddMessage({ channel_id = '' }) {
           label="Send a message 💬"
           multiline
           placeholder="..."
-          // helperText="Add a new message to this channel!"
           fullWidth
           margin="normal"
           variant="filled"

@@ -5,6 +5,7 @@ import './App.css';
 
 import HomePage from './pages/HomePage';
 import ChannelPage from './pages/ChannelPage';
+import DmPage from './pages/DmPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
@@ -52,6 +53,7 @@ function App() {
           <ProtectedRoute exact path="/" component={HomePage} />
           <ProtectedRoute path="/profile/:profile" component={ProfilePage} />
           <ProtectedRoute path="/channel/:channel_id" component={ChannelPage} />
+          <ProtectedRoute path="/dm/:dm_id" component={DmPage} />
           <ProtectedRoute path="/search/:query_str" component={SearchPage} />
           <ProtectedRoute path="/search" component={SearchPage} />
         </Switch>

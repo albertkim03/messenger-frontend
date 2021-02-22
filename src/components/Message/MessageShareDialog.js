@@ -20,14 +20,15 @@ import { useStep } from '../../utils/update';
 
 function MessageShareDialog({ og_message_id, ...props }) {
   const [open, setOpen] = React.useState(false);
-  const [selectedChannel, setSelectedChannel] = React.useState('');
+  const [selectedChannel, setSelectedChannel] = React.useState(-1);
+  const [selectedDm, setSelectedDm] = React.useState(-1);
   const [channels, setChannels] = React.useState([]);
+  const [dms, setDms] = React.useState([]);
   const [message, setMessage] = React.useState('');
 
   const token = React.useContext(AuthContext);
 
   const step = useStep();
-
 
   function fetchChannelData() {
     axios
@@ -40,6 +41,16 @@ function MessageShareDialog({ og_message_id, ...props }) {
         setChannels(data['channels']);
       })
       .catch((err) => { });
+    axios
+      .get('dm/list', {
+        params: {
+          token,
+        },
+      })
+      .then(({ data }) => {
+        setDms(data['dm']);
+      })
+      .catch((err) => { });
   }
 
   React.useEffect(() => {
@@ -47,8 +58,12 @@ function MessageShareDialog({ og_message_id, ...props }) {
   }, []);
 
   const handleChannelSelect = event => {
-    const newChannelId = parseInt(event.target.value, 10);
-    setSelectedChannel(newChannelId);
+    const newId = parseInt(event.target.value, 10);
+    if (event.target.dm) {
+      setSelectedDm(newId);
+    } else {
+      setSelectedChannel(newId);
+    }
   };
 
   function handleClickOpen() {
@@ -65,15 +80,13 @@ function MessageShareDialog({ og_message_id, ...props }) {
 
   function handleSubmit(event) {
     event.preventDefault();
-    const channel_id = selectedChannel;
-
-    if (channel_id == null) return;
 
     axios.post(`/message/share`, {
       token,
       og_message_id: Number.parseInt(og_message_id),
       message,
-      channel_id: Number.parseInt(channel_id),
+      channel_id: Number.parseInt(selectedChannel),
+      dm_id: Number.parseInt(selectedDm),
     })
       .then((response) => {
         console.log(response);
@@ -105,7 +118,10 @@ function MessageShareDialog({ og_message_id, ...props }) {
             </DialogContentText>
             <Select style={{ width: "100%" }} id="u_id" onChange={handleChannelSelect} value={selectedChannel}>
               {channels.map((d, idx) => {
-                return <MenuItem key={d.channel_id} value={d.channel_id}>{d.name}</MenuItem>
+                return <MenuItem key={d.channel_id} dm={false} value={d.channel_id}>{d.name}</MenuItem>
+              })}
+              {dms.map((d, idx) => {
+                return <MenuItem key={d.dm_id} dm={true} value={d.dm_id}>{d.name}</MenuItem>
               })}
             </Select>
             <br /><br />
