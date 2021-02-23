@@ -58,7 +58,12 @@ function UserRemoveDialog({ children, ...props }) {
     const u_id = parseInt(event.target[0].value, 10);
 
     axios
-      .post(`/admin/user/remove`, { data: { token, u_id } })
+      .delete(`/admin/user/remove`, {
+        data: {
+          token,
+          u_id: Number.parseInt(u_id),
+        }
+      })
       .then(response => {
         console.log(response);
       })
