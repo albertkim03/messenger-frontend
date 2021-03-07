@@ -51,11 +51,21 @@ export default function NotificationList() {
       >
         {notifs.length === 0
           ? <>&nbsp;You don't have any notifications.&nbsp;</>
-          : notifs.map((notif) => (
-            <MenuItem component={Link} to={`/channel/${notif.channel_id}`}>
-              {notif.notification_message}
-            </MenuItem>
-          ))}
+          : notifs.map((notif) => {
+            if (notif.dm_id === -1) {
+              return (
+                <MenuItem component={Link} to={`/channel/${notif.channel_id}`}>
+                  {notif.notification_message}
+                </MenuItem>
+              )
+            } else {
+              return (
+                <MenuItem component={Link} to={`/dm/${notif.dm_id}`}>
+                  {notif.notification_message}
+                </MenuItem>
+              )
+            }
+          })}
         <MenuItem onClick={handleClose}>Close</MenuItem>
       </Menu>
     </div>
