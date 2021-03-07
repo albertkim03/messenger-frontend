@@ -25,8 +25,8 @@ function ChannelList({ channel_id: curr_channel_id }) {
 
   const fetchChannelsData = () => {
     // fetch channels data
-    const getMyChannels = axios.get('/channels/list', { params: { token } });
-    const getAllChannels = axios.get('/channels/listall', { params: { token } });
+    const getMyChannels = axios.get('/channels/list/v2', { params: { token } });
+    const getAllChannels = axios.get('/channels/listall/v2', { params: { token } });
 
     axios.all([getMyChannels, getAllChannels]).then(
       axios.spread((myChannelResponse, allChannelResponse) => {

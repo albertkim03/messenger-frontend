@@ -14,9 +14,10 @@ import MessagePin from './MessagePin';
 import MessageReact from './MessageReact';
 import MessageRemove from './MessageRemove';
 import MessageEdit from './MessageEdit';
+import MessageShareDialog from './MessageShareDialog';
 
-import {isMatchingId} from '../../utils';
-import {extractUId} from '../../utils/token';
+import { isMatchingId } from '../../utils';
+import { extractUId } from '../../utils/token';
 
 function Message({
   message_id,
@@ -43,7 +44,7 @@ function Message({
     setNameLast();
     setImgUrl()
     axios
-      .get(`/user/profile`, {
+      .get(`/user/profile/v2`, {
         params: {
           token,
           u_id,
@@ -110,13 +111,16 @@ function Message({
                 message_id={message_id}
                 is_pinned={is_pinned}
               />
+              <MessageShareDialog
+                og_message_id={message_id}
+              />
               <MessageEdit
                 message_id={message_id}
-                // disabled={!isUser} /* We have no way of checking admin status */
+              // disabled={!isUser} /* We have no way of checking admin status */
               />
               <MessageRemove
                 message_id={message_id}
-                // disabled={!isUser} /* We have no way of checking admin status */
+              // disabled={!isUser} /* We have no way of checking admin status */
               />
             </div>
           </div>

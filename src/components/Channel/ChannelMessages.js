@@ -27,32 +27,32 @@ function ChannelMessages({ channel_id = '' }) {
 
   const fetchChannelMessages = () => {
     const p = pagination.channelId === channel_id
-        ? pagination
-        : {
-          "channelId": channel_id,
-          "isPaginating": false,
-          "currentStart": 0,
-          "currentEnd": 0,
-          "sliceStart": 0,
-        }
+      ? pagination
+      : {
+        "channelId": channel_id,
+        "isPaginating": false,
+        "currentStart": 0,
+        "currentEnd": 0,
+        "sliceStart": 0,
+      }
     axios
-        .get('/channel/messages', {
-          params: {
-            token,
-            channel_id: Number.parseInt(channel_id),
-            start: p.isPaginating ? p.currentStart : 0,
-          },
-        })
-        .then(({data}) => {
-          const {messages: newMessages, start, end} = data;
-          setPagination({ ...p, channelId: channel_id, currentEnd: end }); // TODO: add/remove problems
-          setMessages(newMessages);
-        })
-        .catch((err) => {});
+      .get('/channel/messages/v2', {
+        params: {
+          token,
+          channel_id: Number.parseInt(channel_id),
+          start: p.isPaginating ? p.currentStart : 0,
+        },
+      })
+      .then(({ data }) => {
+        const { messages: newMessages, start, end } = data;
+        setPagination({ ...p, channelId: channel_id, currentEnd: end }); // TODO: add/remove problems
+        setMessages(newMessages);
+      })
+      .catch((err) => { });
   }
   const step = useStep(fetchChannelMessages, [channel_id, pagination.currentStart]);
 
-  const onPrev = () => setPagination(({sliceStart, currentStart, currentEnd, ...pagination}) => {
+  const onPrev = () => setPagination(({ sliceStart, currentStart, currentEnd, ...pagination }) => {
 
     const pageSize = messages.length;
 
@@ -76,7 +76,7 @@ function ChannelMessages({ channel_id = '' }) {
 
   });
 
-  const onNext = () => setPagination(({sliceStart, currentStart, ...pagination}) => {
+  const onNext = () => setPagination(({ sliceStart, currentStart, ...pagination }) => {
 
     if (sliceStart >= SLICE_SIZE) {
       return {
@@ -91,7 +91,7 @@ function ChannelMessages({ channel_id = '' }) {
       if (currentStart) return {
         ...pagination,
         currentStart: currentStart - PAGINATION_SIZE,
-        sliceStart: PAGINATION_SIZE-SLICE_SIZE,
+        sliceStart: PAGINATION_SIZE - SLICE_SIZE,
       };
     }
 
@@ -104,14 +104,14 @@ function ChannelMessages({ channel_id = '' }) {
 
   });
 
-  const {currentStart, currentEnd, sliceStart, isPaginating} = pagination;
+  const { currentStart, currentEnd, sliceStart, isPaginating } = pagination;
 
   const isEnd = currentEnd == -1 && sliceStart >= messages.length - SLICE_SIZE;
 
   const pinnedMessages = messages.filter(m => m.is_pinned);
   const subheader = !messages.length
-      ? `Messages (None)`
-      : `Messages [${currentStart+sliceStart+1}...${Math.min(currentStart+messages.length, currentStart+sliceStart+SLICE_SIZE)}]`;
+    ? `Messages (None)`
+    : `Messages [${currentStart + sliceStart + 1}...${Math.min(currentStart + messages.length, currentStart + sliceStart + SLICE_SIZE)}]`;
 
   return (
     <StepProvider value={fetchChannelMessages}>

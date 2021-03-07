@@ -7,7 +7,7 @@ function ChannelPage({ match }) {
   const { channel_id } = match.params;
   return (
     <Layout
-      menu={<ProfileChannelLists channel_id={channel_id} />}
+      menu={<ProfileChannelLists channel_id={channel_id} dm_id={null} />}
       body={<Channel channel_id={channel_id} />}
     />
   );
