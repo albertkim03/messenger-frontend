@@ -37,12 +37,12 @@ function AddChannelDialog({ ...props }) {
     if (!name) return;
 
     axios
-      .post(`/channels/create`, { token, name, is_public })
+      .post(`/channels/create/v2`, { token, name, is_public })
       .then(response => {
         console.log(response);
         props.callback();
       })
-      .catch(err => {});
+      .catch(err => { });
   }
   return (
     <div>

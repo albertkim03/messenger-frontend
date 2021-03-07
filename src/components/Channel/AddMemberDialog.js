@@ -27,7 +27,7 @@ function AddMemberDialog({ channel_id, ...props }) {
 
   function fetchUserData() {
     axios
-      .get('/users/all', {
+      .get('/users/all/v1', {
         params: {
           token,
         },
@@ -59,7 +59,7 @@ function AddMemberDialog({ channel_id, ...props }) {
 
     if (u_id == null) return;
 
-    axios.post(`/channel/invite`, {
+    axios.post(`/channel/invite/v2`, {
       token,
       u_id: Number.parseInt(u_id),
       channel_id: Number.parseInt(channel_id),

@@ -35,7 +35,7 @@ function AddDmDialog({ ...props }) {
 
   function fetchUserData() {
     axios
-      .get('/users/all', {
+      .get('/users/all/v1', {
         params: {
           token,
         },
@@ -71,7 +71,7 @@ function AddDmDialog({ ...props }) {
     if (!name) return;
 
     axios
-      .post(`/dm/create`, { token, selectedUsers })
+      .post(`/dm/create/v1`, { token, selectedUsers })
       .then(response => {
         console.log(response);
         props.callback();

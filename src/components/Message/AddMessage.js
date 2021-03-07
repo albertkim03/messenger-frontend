@@ -132,8 +132,8 @@ function AddMessage({ channel_id = '', dm_id = '' }) {
     /**
      * Default message sending behaviour
      */
-    const route = dm_id === '' ? '/message/send' : 'message/senddm';
-    axios.post(`/message/send`, {
+    const route = dm_id === '' ? '/message/send/v2' : 'message/senddm/v1';
+    axios.post(`route`, {
       token,
       channel_id: Number.parseInt(channel_id),
       dm_id: Number.parseInt(dm_id),

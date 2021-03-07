@@ -32,7 +32,7 @@ function MessageShareDialog({ og_message_id, ...props }) {
 
   function fetchChannelData() {
     axios
-      .get('channels/list', {
+      .get('channels/list/v2', {
         params: {
           token,
         },
@@ -81,7 +81,7 @@ function MessageShareDialog({ og_message_id, ...props }) {
   function handleSubmit(event) {
     event.preventDefault();
 
-    axios.post(`/message/share`, {
+    axios.post(`/message/share/v1`, {
       token,
       og_message_id: Number.parseInt(og_message_id),
       message,

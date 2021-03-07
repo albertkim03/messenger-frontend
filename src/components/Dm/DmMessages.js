@@ -36,7 +36,7 @@ function DmMessages({ dm_id = '' }) {
         "sliceStart": 0,
       }
     axios
-      .get('/dm/messages', {
+      .get('/dm/messages/v1', {
         params: {
           token,
           dm_id: Number.parseInt(dm_id),

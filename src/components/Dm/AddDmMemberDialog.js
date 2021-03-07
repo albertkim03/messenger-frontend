@@ -27,7 +27,7 @@ function AddDmMemberDialog({ dm_id, ...props }) {
 
   function fetchUserData() {
     axios
-      .get('/users/all', {
+      .get('/users/all/v1', {
         params: {
           token,
         },
@@ -59,7 +59,7 @@ function AddDmMemberDialog({ dm_id, ...props }) {
 
     if (u_id == null) return;
 
-    axios.post(`/dm/invite`, {
+    axios.post(`/dm/invite/v1`, {
       token,
       u_id: Number.parseInt(u_id),
       dm_id: Number.parseInt(dm_id),

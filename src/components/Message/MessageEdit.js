@@ -8,17 +8,17 @@ import {
 import EditIcon from '@material-ui/icons/Edit';
 
 import AuthContext from '../../AuthContext';
-import {StepContext} from '../Channel/ChannelMessages';
+import { StepContext } from '../Channel/ChannelMessages';
 
 function MessageEdit({
     message_id,
-    disabled=false,
+    disabled = false,
 }) {
 
     const token = React.useContext(AuthContext);
 
     let step = React.useContext(StepContext);
-    step = step ? step : () => {}; // sanity check
+    step = step ? step : () => { }; // sanity check
 
     const messageEdit = () => {
         const message = prompt();
@@ -28,29 +28,29 @@ function MessageEdit({
          * Empty message should delete original
          */
         if (message === "") {
-            axios.delete(`/message/remove`, {
+            axios.delete(`/message/remove/v1`, {
                 data: {
                     token,
                     message_id: Number.parseInt(message_id),
                 }
             })
-            .then(() => {
-                step();
-            });
+                .then(() => {
+                    step();
+                });
             return;
         }
 
         /**
          * Default message edit behaviour
          */
-        axios.put(`/message/edit`, {
+        axios.put(`/message/edit/v2`, {
             token,
             message_id: Number.parseInt(message_id),
             message,
         })
-        .then(() => {
-            step();
-        });
+            .then(() => {
+                step();
+            });
     };
 
     return (

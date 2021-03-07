@@ -27,7 +27,7 @@ function Dm({ dm_id, ...props }) {
 
   function fetchDmData() {
     axios
-      .get('/dm/details', {
+      .get('/dm/details/v1', {
         params: {
           token,
           dm_id: dm_id,
@@ -50,7 +50,7 @@ function Dm({ dm_id, ...props }) {
 
   function leaveDm(dm_id, token) {
     axios
-      .post('/dm/leave', {
+      .post('/dm/leave/v1', {
         token,
         dm_id: Number.parseInt(dm_id),
       })

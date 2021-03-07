@@ -16,7 +16,7 @@ export default function NotificationList() {
   React.useEffect(() => {
     const interval = setInterval(async () => {
       axios
-        .get('/notifications/get', {
+        .get('/notifications/get/v1', {
           params: { token },
         })
         .then(({ data }) => {

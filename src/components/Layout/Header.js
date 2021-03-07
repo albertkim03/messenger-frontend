@@ -44,7 +44,7 @@ function Header({ handleMenuToggle = () => { } }) {
   const [loggedOut, setLoggedOut] = React.useState(false);
 
   if (loggedOut) {
-    axios.post(`/auth/logout`, { token })
+    axios.post(`/auth/logout/v1`, { token })
       .then((response) => {
         console.log(response);
       })

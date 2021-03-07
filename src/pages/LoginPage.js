@@ -49,14 +49,14 @@ function LoginPage({ setAuth, ...props }) {
     setLoading(true);
 
     // Send to backend
-    axios.post(`/auth/login`, { email, password })
+    axios.post(`/auth/login/v2`, { email, password })
       .then((response) => {
         console.log(response);
         const data = response.data;
         setAuth(data.token, data.u_id);
         props.history.push('/');
       })
-      .catch((err) => {})
+      .catch((err) => { })
       .finally(() => setLoading(false));
   }
 
@@ -73,52 +73,52 @@ function LoginPage({ setAuth, ...props }) {
         </Typography>
         {
           loading
-            ? <div style={{ marginTop: "64px"}}><Placeholder /></div>
+            ? <div style={{ marginTop: "64px" }}><Placeholder /></div>
             : <form noValidate onSubmit={handleSubmit}>
-                <TextField
-                    variant="outlined"
-                    margin="normal"
-                    required
-                    fullWidth
-                    id="email"
-                    label="Email"
-                    name="email"
-                    type="text"
-                    autoFocus
-                />
-                <TextField
-                    variant="outlined"
-                    margin="normal"
-                    required
-                    fullWidth
-                    name="password"
-                    label="Password"
-                    type="password"
-                    id="password"
-                    autoComplete="current-password"
-                />
-                <div className="password-warning">
-                  Passwords are not securely stored.<br />
+              <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                id="email"
+                label="Email"
+                name="email"
+                type="text"
+                autoFocus
+              />
+              <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                name="password"
+                label="Password"
+                type="password"
+                id="password"
+                autoComplete="current-password"
+              />
+              <div className="password-warning">
+                Passwords are not securely stored.<br />
                   Do not enter any currently used passwords.
                 </div>
-                <Button type="submit" fullWidth variant="contained" color="primary">
-                  Sign In
+              <Button type="submit" fullWidth variant="contained" color="primary">
+                Sign In
                 </Button>
-                <Grid container direction="column" alignItems="center">
-                  <Grid item>
-                    <br />
-                    <Link href="/register" variant="body1">
-                      {"Don't have an account? Register"}
-                    </Link>
-                  </Grid>
-                  <Grid item>
-                    <br />
-                    <Link href="/forgot_password" variant="body1">
-                      Forgot password?
-                    </Link>
-                  </Grid>
+              <Grid container direction="column" alignItems="center">
+                <Grid item>
+                  <br />
+                  <Link href="/register" variant="body1">
+                    {"Don't have an account? Register"}
+                  </Link>
                 </Grid>
-              </form>
+                <Grid item>
+                  <br />
+                  <Link href="/forgot_password" variant="body1">
+                    Forgot password?
+                    </Link>
+                </Grid>
+              </Grid>
+            </form>
         }
       </Box>
     </Container>

@@ -23,7 +23,7 @@ function UserRemoveDialog({ children, ...props }) {
   React.useEffect(() => {
     function fetchUserData() {
       axios
-        .get('/users/all', {
+        .get('/users/all/v1', {
           params: {
             token,
           },
@@ -58,7 +58,7 @@ function UserRemoveDialog({ children, ...props }) {
     const u_id = parseInt(event.target[0].value, 10);
 
     axios
-      .delete(`/admin/user/remove`, {
+      .delete(`/admin/user/remove/v1`, {
         data: {
           token,
           u_id: Number.parseInt(u_id),

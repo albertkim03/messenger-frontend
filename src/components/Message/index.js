@@ -44,7 +44,7 @@ function Message({
     setNameLast();
     setImgUrl()
     axios
-      .get(`/user/profile`, {
+      .get(`/user/profile/v2`, {
         params: {
           token,
           u_id,
