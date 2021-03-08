@@ -58,7 +58,7 @@ function RegisterPage({ setAuth, ...props }) {
       .then((response) => {
         console.log(response);
         const data = response.data;
-        setAuth(data.token, data.u_id);
+        setAuth(data.token, data.auth_user_id);
         props.history.push('/');
       })
       .catch((err) => { })
