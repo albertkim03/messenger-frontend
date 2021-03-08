@@ -60,6 +60,19 @@ function Dm({ dm_id, ...props }) {
       .catch((err) => { });
   }
 
+  function removeDm(dm_id, token) {
+    axios.delete(`/dm/remove/v1`, {
+      data: {
+        token,
+        dm_id: Number.parseInt(dm_id),
+      }
+    })
+      .then(() => {
+        fetchDmData(dm_id, token);
+      })
+      .catch((err) => { });
+  }
+
   return <>
     {loading
       ? <Placeholder />
@@ -99,6 +112,12 @@ function Dm({ dm_id, ...props }) {
                   onClick={() => leaveDm(dm_id, token)}
                 >
                   Leave Dm
+                </Button>
+                <Button
+                  variant="outlined"
+                  onClick={() => removeDm(dm_id, token)}
+                >
+                  Remove Dm
                 </Button>
               </Grid>
             </Grid>
