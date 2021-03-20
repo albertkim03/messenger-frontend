@@ -12,6 +12,7 @@ import TimerIcon from '@material-ui/icons/Timer';
 import { makeStyles } from '@material-ui/styles';
 import AuthContext from '../../AuthContext';
 import { StepContext } from '../Channel/ChannelMessages';
+import { StepContextDm } from '../Dm/DmMessages';
 import AddMessageTimerDialog from './AddMessageTimerDialog';
 import { useInterval } from '../../utils';
 import { useStep } from '../../utils/update';
@@ -49,7 +50,9 @@ function AddMessage({ channel_id = '', dm_id = '' }) {
   const [timerDialogOpen, setTimerDialogOpen] = React.useState(false);
   const token = React.useContext(AuthContext);
   let onAdd = React.useContext(StepContext);
+  let onAddDm = React.useContext(StepContextDm);
   onAdd = onAdd ? onAdd : () => { }; // sanity check
+  onAddDm = onAddDm ? onAddDm : () => { }; // sanity check
 
   const isTimerSet = currentTimer !== TIMER_INACTIVE_VALUE;
 
@@ -133,7 +136,7 @@ function AddMessage({ channel_id = '', dm_id = '' }) {
      * Default message sending behaviour
      */
     const route = dm_id === '' ? '/message/send/v2' : 'message/senddm/v1';
-    axios.post(`route`, {
+    axios.post(route, {
       token,
       channel_id: Number.parseInt(channel_id),
       dm_id: Number.parseInt(dm_id),
@@ -142,6 +145,7 @@ function AddMessage({ channel_id = '', dm_id = '' }) {
       .then(({ data }) => {
         console.log(data);
         onAdd();
+        onAddDm();
       })
       .catch((err) => { });
   };
@@ -155,7 +159,9 @@ function AddMessage({ channel_id = '', dm_id = '' }) {
   }, 1000);
 
   const checkStandupActive = () => {
-    if (standupRemaining > 0) return;
+    if (channel_id === '' || standupRemaining > 0) return;
+    return;
+    // REMOVE THE ABOVE RETURN STATEMENT FOR ITERATION 3
     axios
       .get('/standup/active', { params: { token, channel_id } })
       .then(({ data }) => {

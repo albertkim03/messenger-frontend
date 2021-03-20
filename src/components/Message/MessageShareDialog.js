@@ -22,8 +22,8 @@ function MessageShareDialog({ og_message_id, ...props }) {
   const [open, setOpen] = React.useState(false);
   const [selectedChannel, setSelectedChannel] = React.useState(-1);
   const [selectedDm, setSelectedDm] = React.useState(-1);
-  const [channels, setChannels] = React.useState([]);
-  const [dms, setDms] = React.useState([]);
+  const [channelsShare, setChannelsShare] = React.useState([]);
+  const [dmsShare, setDmsShare] = React.useState([]);
   const [message, setMessage] = React.useState('');
 
   const token = React.useContext(AuthContext);
@@ -38,17 +38,17 @@ function MessageShareDialog({ og_message_id, ...props }) {
         },
       })
       .then(({ data }) => {
-        setChannels(data['channels']);
+        setChannelsShare(data['channels']);
       })
       .catch((err) => { });
     axios
-      .get('dm/list', {
+      .get('dm/list/v1', {
         params: {
           token,
         },
       })
       .then(({ data }) => {
-        setDms(data['dm']);
+        setDmsShare(data['dms']);
       })
       .catch((err) => { });
   }
@@ -117,10 +117,10 @@ function MessageShareDialog({ og_message_id, ...props }) {
               Enter a channel below to share the message to
             </DialogContentText>
             <Select style={{ width: "100%" }} id="u_id" onChange={handleChannelSelect} value={selectedChannel}>
-              {channels.map((d, idx) => {
+              {channelsShare.map((d) => {
                 return <MenuItem key={d.channel_id} dm={false} value={d.channel_id}>{d.name}</MenuItem>
               })}
-              {dms.map((d, idx) => {
+              {dmsShare.map((d) => {
                 return <MenuItem key={d.dm_id} dm={true} value={d.dm_id}>{d.name}</MenuItem>
               })}
             </Select>

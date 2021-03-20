@@ -22,7 +22,7 @@ import Placeholder from '../Placeholder';
 function Dm({ dm_id, ...props }) {
   const [loading, setLoading] = React.useState(true);
   const [name, setName] = React.useState('');
-  const [members, setMembers] = React.useState([]);
+  const [membersList, setMembersList] = React.useState([]);
   const token = React.useContext(AuthContext);
 
   function fetchDmData() {
@@ -34,13 +34,14 @@ function Dm({ dm_id, ...props }) {
         },
       })
       .then(({ data }) => {
-        const { name, all_members } = data;
+        const { name, members } = data;
         // assumes members of form [{ u_id, name_first, name_last }]
-        setMembers(all_members);
+        console.log(members);
+        setMembersList(members);
         setName(name);
       })
       .catch((err) => {
-        setMembers([]);
+        setMembersList([]);
         setName('');
       })
       .finally(() => setLoading(false));
@@ -79,7 +80,7 @@ function Dm({ dm_id, ...props }) {
       : <>
         <Typography variant="h4">{name.toUpperCase()}</Typography>
         <List subheader={<ListSubheader>Members</ListSubheader>}>
-          {members.map(({ u_id, name_first, name_last, profile_img_url }) => (
+          {membersList.map(({ u_id, name_first, name_last, profile_img_url }) => (
             <ListItem key={u_id}>
               <ListItemAvatar>
                 <Avatar style={{ width: "50px", height: "50px", border: "1px solid #ccc" }} src={profile_img_url}>
@@ -113,6 +114,7 @@ function Dm({ dm_id, ...props }) {
                 >
                   Leave Dm
                 </Button>
+                &nbsp;
                 <Button
                   variant="outlined"
                   onClick={() => removeDm(dm_id, token)}

@@ -10,7 +10,8 @@ import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ThumbUpOutlinedIcon from '@material-ui/icons/ThumbUpOutlined';
 
 import AuthContext from '../../AuthContext';
-import {StepContext} from '../Channel/ChannelMessages';
+import { StepContext } from '../Channel/ChannelMessages';
+import { StepContextDm } from '../Dm/DmMessages';
 
 function MessageReact({
   message_id,
@@ -19,7 +20,9 @@ function MessageReact({
 
   const token = React.useContext(AuthContext);
   let step = React.useContext(StepContext);
-  step = step ? step : () => {}; // sanity check
+  let stepDm = React.useContext(StepContextDm);
+  step = step ? step : () => { }; // sanity check
+  stepDm = stepDm ? stepDm : () => { }; // sanity check
 
   const messageReact = (is_reacted) => {
     if (is_reacted) {
@@ -28,18 +31,20 @@ function MessageReact({
         message_id: Number.parseInt(message_id),
         react_id: 1 /* FIXME */,
       })
-      .then(() => {
-        step();
-      });
+        .then(() => {
+          step();
+          stepDm();
+        });
     } else {
       axios.post(`/message/react`, {
         token,
         message_id: Number.parseInt(message_id),
         react_id: 1 /* FIXME */,
       })
-      .then(() => {
-        step();
-      });
+        .then(() => {
+          step();
+          stepDm();
+        });
     }
   };
 
@@ -66,7 +71,7 @@ function MessageReact({
       >
         {is_reacted ? (
           <ThumbUpIcon fontSize="small" />
-          ) : (
+        ) : (
           <ThumbUpOutlinedIcon fontSize="small" />
         )}
       </IconButton>

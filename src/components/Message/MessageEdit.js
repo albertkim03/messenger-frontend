@@ -9,6 +9,7 @@ import EditIcon from '@material-ui/icons/Edit';
 
 import AuthContext from '../../AuthContext';
 import { StepContext } from '../Channel/ChannelMessages';
+import { StepContextDm } from '../Dm/DmMessages';
 
 function MessageEdit({
     message_id,
@@ -18,7 +19,9 @@ function MessageEdit({
     const token = React.useContext(AuthContext);
 
     let step = React.useContext(StepContext);
+    let stepDm = React.useContext(StepContextDm);
     step = step ? step : () => { }; // sanity check
+    stepDm = stepDm ? stepDm : () => { }; // sanity check
 
     const messageEdit = () => {
         const message = prompt();
@@ -36,6 +39,7 @@ function MessageEdit({
             })
                 .then(() => {
                     step();
+                    stepDm();
                 });
             return;
         }
@@ -50,6 +54,7 @@ function MessageEdit({
         })
             .then(() => {
                 step();
+                stepDm();
             });
     };
 

@@ -23,7 +23,7 @@ export default function NotificationList() {
           setNotifs(data.notifications);
         })
         .catch((err) => { });
-    }, 1000);
+    }, 2000);
 
     return () => clearInterval(interval);
   }, []);

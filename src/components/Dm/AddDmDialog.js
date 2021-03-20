@@ -14,6 +14,7 @@ import {
 } from "@material-ui/core";
 import Add from "@material-ui/icons/Add";
 import AuthContext from "../../AuthContext";
+import { extractUId } from '../../utils/token';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -32,6 +33,7 @@ function AddDmDialog({ ...props }) {
   const [users, setUsers] = React.useState([]);
 
   const token = React.useContext(AuthContext);
+  const u_id = extractUId(token);
 
   function fetchUserData() {
     axios
@@ -64,14 +66,11 @@ function AddDmDialog({ ...props }) {
 
   function handleSubmit(event) {
     event.preventDefault();
-    const name = event.target[0].value;
-    const secret = event.target[1].checked;
-    const is_public = !secret;
 
-    if (!name) return;
+    console.log(selectedUsers);
 
     axios
-      .post(`/dm/create/v1`, { token, selectedUsers })
+      .post(`/dm/create/v1`, { token, u_ids: selectedUsers })
       .then(response => {
         console.log(response);
         props.callback();
@@ -102,9 +101,11 @@ function AddDmDialog({ ...props }) {
               MenuProps={MenuProps}
               style={{ width: "100%" }}
             >
-              {users.map((d, idx) => (
-                <MenuItem key={d.u_id} value={d.u_id}>{d.name_first + ' ' + d.name_last}</MenuItem>
-              ))}
+              {users.map((d, idx) => {
+                if (u_id != d.u_id) {
+                  return <MenuItem key={d.u_id} value={d.u_id}>{d.name_first + ' ' + d.name_last}</MenuItem>
+                }
+              })}
             </Select>
           </DialogContent>
           <DialogActions>

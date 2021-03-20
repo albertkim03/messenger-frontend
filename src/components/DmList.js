@@ -24,7 +24,7 @@ function DmList({ dm_id: curr_dm_id }) {
 
   const fetchDmsData = () => {
     axios
-      .get('/dms/list', {
+      .get('/dm/list/v1', {
         params: {
           token,
         },
@@ -58,8 +58,8 @@ function DmList({ dm_id: curr_dm_id }) {
               {dm_id == curr_dm_id ? (
                 <RadioButtonCheckedIcon />
               ) : (
-                  <RadioButtonUncheckedIcon />
-                )}
+                <RadioButtonUncheckedIcon />
+              )}
             </ListItemIcon>
             <ListItemText primary={name} />
           </ListItem>

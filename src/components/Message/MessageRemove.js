@@ -7,6 +7,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 
 import AuthContext from '../../AuthContext';
 import { StepContext } from '../Channel/ChannelMessages';
+import { StepContextDm } from '../Dm/DmMessages';
 
 function MessageRemove({
   message_id,
@@ -16,7 +17,9 @@ function MessageRemove({
   const token = React.useContext(AuthContext);
 
   let step = React.useContext(StepContext);
+  let stepDm = React.useContext(StepContextDm);
   step = step ? step : () => { }; // sanity check
+  stepDm = stepDm ? stepDm : () => { }; // sanity check
 
   const messageRemove = () => {
     axios.delete(`/message/remove/v1`, {
@@ -27,6 +30,7 @@ function MessageRemove({
     })
       .then(() => {
         step();
+        stepDm();
       });
   };
 

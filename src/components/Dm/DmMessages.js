@@ -9,9 +9,9 @@ import AddMessage from '../Message/AddMessage';
 import { PAGINATION_SIZE, SLICE_SIZE } from '../../utils/constants';
 
 
-export const StepContext = React.createContext();
-export const StepProvider = StepContext.Provider;
-export const StepConsumer = StepContext.Consumer;
+export const StepContextDm = React.createContext();
+export const StepProvider = StepContextDm.Provider;
+export const StepConsumer = StepContextDm.Consumer;
 
 function DmMessages({ dm_id = '' }) {
 
