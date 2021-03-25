@@ -31,7 +31,7 @@ const errorHandler = (error) => {
 
     if (error.response) {
         const found = typeof error.response.data === 'string'
-            && error.response.data.match(/<h1>Bad Request<\/h1>\n<p>(.*)<\/p>/);
+            && error.response.data.match(/<p>(.*)<\/p>/);
         const responseMessage = found && found.length > 1 && found[1];
         message = _.get(error, 'response.data.message') || responseMessage || DEFAULT_ERROR_TEXT;
     }
