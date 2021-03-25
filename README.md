@@ -37,9 +37,9 @@ For example:
 
 ## Iteration 3 onwards
 
-Update line 4 in run.sh to contain your deployed backend url. For example, for a url `https://example.alwaysdata.net`, line 4 should be:
-```bash
-echo "REACT_APP_BACKEND_DEPLOYED=https://example.alwaysdata.net" >> .env
+Update line 4 in src/utils/constants.js to contain your deployed backend url. For example, for a url `https://example.alwaysdata.net`, line 4 should be:
+```javascript
+const deployedUrl = "https://example.alwaysdata.net";
 ```
 
 To utilise this deployed backend, run:

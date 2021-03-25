@@ -1,7 +1,7 @@
 require("dotenv").config();
 
 const port = process.env.REACT_APP_BACKEND_PORT;
-const deployedUrl = process.env.REACT_APP_BACKEND_DEPLOYED;
+const deployedUrl = "https://example.alwaysdata.net";
 export const url = port === "0" ? deployedUrl : "http://localhost:" + port;
 console.log(url);
 
