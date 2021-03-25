@@ -2,7 +2,7 @@ require("dotenv").config();
 
 const port = process.env.REACT_APP_BACKEND_PORT;
 const deployedUrl = "https://example.alwaysdata.net";
-export const url = port === "0" ? deployedUrl : "http://localhost:" + port;
+export const url = port === "0" || port === undefined ? deployedUrl : "http://localhost:" + port;
 console.log(url);
 
 export const drawerWidth = 240;
