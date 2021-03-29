@@ -4,11 +4,12 @@ from flask import Flask, send_from_directory
 
 if len(sys.argv) == 2:
     f = open('prebundle/config.js', 'w')
-    f.write('var LOCAL_ENV = true\n')
-    f.write('var BACKEND_PORT = ' + str(sys.argv[1]))
+    f.write('var BACKEND_PORT = "' + str(sys.argv[1]) + '";')
+    f.write('var DEPLOYED_URL = "https://example.alwaysdata.net";')
     f.close()
 
 app = Flask(__name__, static_folder='prebundle')
+
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
@@ -20,6 +21,6 @@ def serve(path):
         print(app.static_folder, 'index.html')
         return send_from_directory(app.static_folder, 'index.html')
 
+
 if __name__ == '__main__':
     app.run(port=0, threaded=True)
-

@@ -1,9 +1,15 @@
 require("dotenv").config();
 
-const port = process.env.REACT_APP_BACKEND_PORT;
-const deployedUrl = "https://example.alwaysdata.net";
+let port = "0";
+let deployedUrl = "https://z5061640.alwaysdata.net";
+if (window.BACKEND_PORT !== undefined) {
+  port = window.BACKEND_PORT;
+  deployedUrl = window.DEPLOYED_URL;
+} else {
+  port = process.env.REACT_APP_BACKEND_PORT;
+}
 export const url = port === "0" || port === undefined ? deployedUrl : "http://localhost:" + port;
-console.log(url);
+console.log("Using backend at " + url);
 
 export const drawerWidth = 240;
 export const PERMISSION_IDS = {
