@@ -22,6 +22,7 @@ function MessageShareDialog({ og_message_id, ...props }) {
   const [open, setOpen] = React.useState(false);
   const [selectedChannel, setSelectedChannel] = React.useState(-1);
   const [selectedDm, setSelectedDm] = React.useState(-1);
+  const [selectedChDm, setSelectedChDm] = React.useState('');
   const [channelsShare, setChannelsShare] = React.useState([]);
   const [dmsShare, setDmsShare] = React.useState([]);
   const [message, setMessage] = React.useState('');
@@ -58,11 +59,13 @@ function MessageShareDialog({ og_message_id, ...props }) {
   }, []);
 
   const handleChannelSelect = event => {
-    const newId = parseInt(event.target.value, 10);
-    if (event.target.dm) {
-      setSelectedDm(newId);
+    setSelectedChDm(event.target.value);
+    if (event.target.value.slice(0, 1) === 'd') {
+      setSelectedDm(event.target.value.slice(1));
+      setSelectedChannel(-1);
     } else {
-      setSelectedChannel(newId);
+      setSelectedChannel(event.target.value.slice(1));
+      setSelectedDm(-1);
     }
   };
 
@@ -116,12 +119,12 @@ function MessageShareDialog({ og_message_id, ...props }) {
             <DialogContentText>
               Enter a channel below to share the message to
             </DialogContentText>
-            <Select style={{ width: "100%" }} id="u_id" onChange={handleChannelSelect} value={selectedChannel}>
+            <Select style={{ width: "100%" }} id="u_id" onChange={handleChannelSelect} value={selectedChDm}>
               {channelsShare.map((d) => {
-                return <MenuItem key={d.channel_id} dm={false} value={d.channel_id}>{d.name}</MenuItem>
+                return <MenuItem key={d.channel_id} value={`c${d.channel_id}`}>{d.name}</MenuItem>
               })}
               {dmsShare.map((d) => {
-                return <MenuItem key={d.dm_id} dm={true} value={d.dm_id}>{d.name}</MenuItem>
+                return <MenuItem key={d.dm_id} value={`d${d.dm_id}`}>{d.name}</MenuItem>
               })}
             </Select>
             <br /><br />
