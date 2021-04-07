@@ -5,7 +5,6 @@ import axios from 'axios';
 import React from 'react';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import AuthContext from '../../AuthContext';
-import { extractUId } from '../../utils/token';
 import Message from '../Message';
 
 function Search({ query_str, ...props }) {
@@ -14,7 +13,6 @@ function Search({ query_str, ...props }) {
   const [messages, setMessages] = React.useState([]);
 
   const token = React.useContext(AuthContext);
-  const u_id = extractUId(token);
 
   function performSearch() {
     axios
@@ -44,7 +42,7 @@ function Search({ query_str, ...props }) {
   if (query_str === "") {
     return <>
       <Typography variant="h4" style={{ marginBottom: 10 }}>Search</Typography>
-      <Typography variant="h6">Enter a query in the search bar above 👀</Typography>
+      <Typography variant="h6">Enter a query in the search bar above</Typography>
     </>
   }
 
@@ -55,7 +53,7 @@ function Search({ query_str, ...props }) {
       <LinearProgress />
       :
       (messages.length == 0) ?
-        <Typography variant="h6">Your search did not return any results 🙁</Typography>
+        <Typography variant="h6">Your search did not return any results</Typography>
         :
         <List
           subheader={<ListSubheader>Messages</ListSubheader>}

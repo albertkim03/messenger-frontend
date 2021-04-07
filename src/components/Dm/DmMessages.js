@@ -50,7 +50,7 @@ function DmMessages({ dm_id = '' }) {
       })
       .catch((err) => { });
   }
-  const step = useStep(fetchDmMessages, [dm_id, pagination.currentStart]);
+  useStep(fetchDmMessages, [dm_id, pagination.currentStart]);
 
   const onPrev = () => setPagination(({ sliceStart, currentStart, currentEnd, ...pagination }) => {
 

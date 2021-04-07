@@ -35,7 +35,7 @@ function DmList({ dm_id: curr_dm_id }) {
       .catch((err) => { });
   };
 
-  const step = useStep(fetchDmsData, [], 2);
+  useStep(fetchDmsData, [], 2);
 
   return (
     <>

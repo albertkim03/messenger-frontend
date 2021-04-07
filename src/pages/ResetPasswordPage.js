@@ -47,12 +47,12 @@ function ForgotPasswordPage(props) {
     setLoading(true);
 
     // Send to backend
-    axios.post(`/auth/passwordreset/reset`, { reset_code, new_password })
+    axios.post(`/auth/passwordreset/reset/v1`, { reset_code, new_password })
       .then((response) => {
         console.log(response);
         props.history.push('/login');
       })
-      .catch((err) => {})
+      .catch((err) => { })
       .finally(() => setLoading(false));
   }
 
@@ -69,41 +69,41 @@ function ForgotPasswordPage(props) {
         </Typography>
         {
           loading
-              ? <div style={{marginTop: "64px"}}><Placeholder/></div>
-              : <form noValidate onSubmit={handleSubmit}>
-                <TextField
-                    variant="outlined"
-                    margin="normal"
-                    required
-                    fullWidth
-                    id="reset_code"
-                    label="Reset code"
-                    name="reset_code"
-                    type="text"
-                    autoFocus
-                />
-                <TextField
-                    variant="outlined"
-                    margin="normal"
-                    required
-                    fullWidth
-                    id="new_password"
-                    label="New Password"
-                    name="new_password"
-                    type="password"
-                />
-                <Button type="submit" fullWidth variant="contained" color="primary">
-                  Change Password
+            ? <div style={{ marginTop: "64px" }}><Placeholder /></div>
+            : <form noValidate onSubmit={handleSubmit}>
+              <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                id="reset_code"
+                label="Reset code"
+                name="reset_code"
+                type="text"
+                autoFocus
+              />
+              <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                id="new_password"
+                label="New Password"
+                name="new_password"
+                type="password"
+              />
+              <Button type="submit" fullWidth variant="contained" color="primary">
+                Change Password
                 </Button>
-                <Grid container>
-                  <Grid item>
-                    <br/>
-                    <Link href="/login" variant="body1">
-                      {'Remember your password? Login'}
-                    </Link>
-                  </Grid>
+              <Grid container>
+                <Grid item>
+                  <br />
+                  <Link href="/login" variant="body1">
+                    {'Remember your password? Login'}
+                  </Link>
                 </Grid>
-              </form>
+              </Grid>
+            </form>
         }
       </Box>
     </Container>

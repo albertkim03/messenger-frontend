@@ -26,7 +26,7 @@ function MessageReact({
 
   const messageReact = (is_reacted) => {
     if (is_reacted) {
-      axios.post(`/message/unreact`, {
+      axios.post(`/message/unreact/v1`, {
         token,
         message_id: Number.parseInt(message_id),
         react_id: 1 /* FIXME */,
@@ -36,7 +36,7 @@ function MessageReact({
           stepDm();
         });
     } else {
-      axios.post(`/message/react`, {
+      axios.post(`/message/react/v1`, {
         token,
         message_id: Number.parseInt(message_id),
         react_id: 1 /* FIXME */,

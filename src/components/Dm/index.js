@@ -15,7 +15,6 @@ import React from 'react';
 import AddDmMemberDialog from './AddDmMemberDialog';
 import DmMessages from './DmMessages';
 import AuthContext from '../../AuthContext';
-import { extractUId } from '../../utils/token';
 import { useStep } from '../../utils/update';
 import Placeholder from '../Placeholder';
 
@@ -47,7 +46,7 @@ function Dm({ dm_id, ...props }) {
       .finally(() => setLoading(false));
   }
 
-  const step = useStep(fetchDmData, [dm_id, token], 2);
+  useStep(fetchDmData, [dm_id, token], 2);
 
   function leaveDm(dm_id, token) {
     axios

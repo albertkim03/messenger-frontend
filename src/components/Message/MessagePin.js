@@ -28,7 +28,7 @@ function MessagePin({
 
   const toggle = () => {
     if (isPinned) {
-      axios.post(`/message/unpin`, {
+      axios.post(`/message/unpin/v1`, {
         token,
         message_id: Number.parseInt(message_id),
       })
@@ -37,7 +37,7 @@ function MessagePin({
           stepDm();
         });
     } else {
-      axios.post(`/message/pin`, {
+      axios.post(`/message/pin/v1`, {
         token,
         message_id: Number.parseInt(message_id),
       })

@@ -10,6 +10,7 @@ import React from 'react';
 import AuthContext from '../../AuthContext';
 import { extractUId } from '../../utils/token';
 import EditableFields from './EditableFields';
+import UserStats from './UserStats';
 import Placeholder from '../Placeholder';
 
 function Profile({ profile }) {
@@ -140,11 +141,14 @@ function Profile({ profile }) {
             />
           </ListItem>
           <br />
-          <div>NOTE: The final field input is to set a profile image. Please enter the 5 components (image url,
-          x_start, y_start, x_end, y_end) separated by commas
-              </div>
+          <div>
+            NOTE: The final field input is to set a profile image. Please enter the 5 components (image url,
+            x_start, y_start, x_end, y_end) separated by commas.
+          </div>
         </List>
       }
+      <br />
+      {editable && <UserStats />}
     </>
   );
 }

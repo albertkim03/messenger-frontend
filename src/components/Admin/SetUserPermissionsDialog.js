@@ -7,14 +7,12 @@ import {
   DialogContent,
   DialogContentText,
   Button,
-  TextField,
   Grid,
   FormControlLabel,
   RadioGroup,
   Radio,
   MenuItem,
   Select,
-  InputLabel,
 } from "@material-ui/core";
 import AuthContext from "../../AuthContext";
 import { PERMISSION_IDS } from "../../utils/constants";

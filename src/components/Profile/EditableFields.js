@@ -2,7 +2,7 @@ import React from 'react';
 import Edit from '@material-ui/icons/Edit';
 import Cancel from '@material-ui/icons/Cancel';
 import Save from '@material-ui/icons/Save';
-import { TextField, Grid } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 
 function EditableFields({
   editable,

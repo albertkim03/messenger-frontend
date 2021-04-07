@@ -1,5 +1,5 @@
 import axios from 'axios';
-import qs from 'qs';
+// import qs from 'qs';
 import _ from 'lodash';
 
 import { url } from './utils/constants';

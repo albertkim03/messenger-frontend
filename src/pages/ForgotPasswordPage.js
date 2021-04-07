@@ -46,12 +46,12 @@ function ForgotPasswordPage(props) {
     setLoading(true);
 
     // Send to backend
-    axios.post(`/auth/passwordreset/request`, { email })
+    axios.post(`/auth/passwordreset/request/v1`, { email })
       .then((response) => {
         console.log(response);
         props.history.push('/reset_password');
       })
-      .catch((err) => {})
+      .catch((err) => { })
       .finally(() => setLoading(false));
   }
 
@@ -68,34 +68,31 @@ function ForgotPasswordPage(props) {
         </Typography>
         {
           loading
-              ? <div style={{marginTop: "64px"}}><Placeholder/></div>
-              : <form noValidate onSubmit={handleSubmit}>
-                <TextField
-                    variant="outlined"
-                    margin="normal"
-                    required
-                    fullWidth
-                    id="email"
-                    label="Email"
-                    name="email"
-                    type="email"
-                    autoFocus
-                />
-                {!window.LOCAL_ENV && <div className="password-warning">
-                  Note: Emails may not successfully reach all UNSW email addresses. For best chances, use an address ending with @ad.unsw.edu.au
-                </div>}
-                <Button type="submit" fullWidth variant="contained" color="primary">
-                  Send Recovery Email
+            ? <div style={{ marginTop: "64px" }}><Placeholder /></div>
+            : <form noValidate onSubmit={handleSubmit}>
+              <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                id="email"
+                label="Email"
+                name="email"
+                type="email"
+                autoFocus
+              />
+              <Button type="submit" fullWidth variant="contained" color="primary">
+                Send Recovery Email
                 </Button>
-                <Grid container>
-                  <Grid item>
-                    <br/>
-                    <Link href="/login" variant="body1">
-                      {'Remember your password? Login'}
-                    </Link>
-                  </Grid>
+              <Grid container>
+                <Grid item>
+                  <br />
+                  <Link href="/login" variant="body1">
+                    {'Remember your password? Login'}
+                  </Link>
                 </Grid>
-              </form>
+              </Grid>
+            </form>
         }
       </Box>
     </Container>

@@ -50,7 +50,7 @@ export default function NotificationList() {
         onClose={handleClose}
       >
         {notifs.length === 0
-          ? <>&nbsp;You don't have any notifications.&nbsp;</>
+          ? <div>&nbsp;You don't have any notifications.&nbsp;</div>
           : notifs.map((notif) => {
             if (notif.dm_id === -1) {
               return (

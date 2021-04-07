@@ -54,7 +54,7 @@ function Channel({ channel_id, ...props }) {
       .finally(() => setLoading(false));
   }
 
-  const step = useStep(fetchChannelData, [channel_id, token], 2);
+  useStep(fetchChannelData, [channel_id, token], 2);
 
   function joinChannel(channel_id, token) {
     axios

@@ -44,7 +44,7 @@ function ChannelList({ channel_id: curr_channel_id }) {
     );
   };
 
-  const step = useStep(fetchChannelsData, [], 2);
+  useStep(fetchChannelsData, [], 2);
 
   return (
     <>

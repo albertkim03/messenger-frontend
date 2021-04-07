@@ -50,7 +50,7 @@ function ChannelMessages({ channel_id = '' }) {
       })
       .catch((err) => { });
   }
-  const step = useStep(fetchChannelMessages, [channel_id, pagination.currentStart]);
+  useStep(fetchChannelMessages, [channel_id, pagination.currentStart]);
 
   const onPrev = () => setPagination(({ sliceStart, currentStart, currentEnd, ...pagination }) => {
 

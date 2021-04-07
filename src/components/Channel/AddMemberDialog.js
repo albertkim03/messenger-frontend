@@ -10,7 +10,6 @@ import {
   Select,
   DialogContentText,
   Button,
-  TextField,
 } from '@material-ui/core';
 import AuthContext from '../../AuthContext';
 import { useStep } from '../../utils/update';

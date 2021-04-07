@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
 
 const TIMER_INACTIVE_VALUE = -1;
 
-function AddMessage({ channel_id = '', dm_id = '' }) {
+function AddMessage({ channel_id = -1, dm_id = -1 }) {
 
   const classes = useStyles();
   const [currentMessage, setCurrentMessage] = React.useState('');
@@ -69,8 +69,8 @@ function AddMessage({ channel_id = '', dm_id = '' }) {
      * note: probably makes sense that this takes precedence over
      *       starting a standup.
      */
-    if (dm_id === '' && standupRemaining && standupRemaining > 0) {
-      axios.post(`/standup/send`, {
+    if (dm_id === -1 && standupRemaining && standupRemaining > 0) {
+      axios.post(`/standup/send/v1`, {
         token,
         channel_id: Number.parseInt(channel_id),
         message,
@@ -87,7 +87,14 @@ function AddMessage({ channel_id = '', dm_id = '' }) {
      * Sending a message when the sendlater timer has been set
      */
     if (isTimerSet) {
-      const route = dm_id === '' ? '/message/sendlater' : 'message/sendlaterdm';
+      const route = dm_id === -1 ? '/message/sendlater/v1' : 'message/sendlaterdm/v1';
+      console.log({
+        token,
+        channel_id: Number.parseInt(channel_id),
+        dm_id: Number.parseInt(dm_id),
+        message,
+        time_sent: (currentTimer.getTime() / 1000), // ms to s conversion
+      });
       axios.post(route, {
         token,
         channel_id: Number.parseInt(channel_id),
@@ -106,7 +113,7 @@ function AddMessage({ channel_id = '', dm_id = '' }) {
     /**
      * Starting a standup (any message which starts with /standup)
      */
-    if (dm_id === '' && message.startsWith('/standup')) {
+    if (dm_id === -1 && message.startsWith('/standup')) {
       const re = /\/standup\s+([1-9][0-9]*)/;
       const found = message.match(re);
       if (!found || found.length < 2) {
@@ -116,7 +123,7 @@ function AddMessage({ channel_id = '', dm_id = '' }) {
         if (isNaN(length) || !Number.isInteger(length)) {
           alert('Usage: /standup <duration in seconds>');
         } else {
-          axios.post(`/standup/start`, {
+          axios.post(`/standup/start/v1`, {
             token,
             channel_id: Number.parseInt(channel_id),
             length,
@@ -135,7 +142,7 @@ function AddMessage({ channel_id = '', dm_id = '' }) {
     /**
      * Default message sending behaviour
      */
-    const route = dm_id === '' ? '/message/send/v2' : 'message/senddm/v1';
+    const route = dm_id === -1 ? '/message/send/v2' : 'message/senddm/v1';
     axios.post(route, {
       token,
       channel_id: Number.parseInt(channel_id),
@@ -159,11 +166,10 @@ function AddMessage({ channel_id = '', dm_id = '' }) {
   }, 1000);
 
   const checkStandupActive = () => {
-    if (channel_id === '' || standupRemaining > 0) return;
-    return;
-    // REMOVE THE ABOVE RETURN STATEMENT FOR ITERATION 3
+    if (channel_id === -1 || standupRemaining > 0) return;
+
     axios
-      .get('/standup/active', { params: { token, channel_id } })
+      .get('/standup/active/v1', { params: { token, channel_id } })
       .then(({ data }) => {
         const { is_active = false, time_finish } = data;
         if (is_active && time_finish) {
@@ -173,7 +179,7 @@ function AddMessage({ channel_id = '', dm_id = '' }) {
       .catch((err) => { });
   }
 
-  const step = useStep(checkStandupActive, [currentMessage] /* check when user is typing */);
+  useStep(checkStandupActive, [currentMessage] /* check when user is typing */);
 
   const keyDown = (e) => {
     if (e.key === 'Enter' && !e.getModifierState('Shift')) {
