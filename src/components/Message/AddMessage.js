@@ -88,13 +88,6 @@ function AddMessage({ channel_id = -1, dm_id = -1 }) {
      */
     if (isTimerSet) {
       const route = dm_id === -1 ? '/message/sendlater/v1' : 'message/sendlaterdm/v1';
-      console.log({
-        token,
-        channel_id: Number.parseInt(channel_id),
-        dm_id: Number.parseInt(dm_id),
-        message,
-        time_sent: (currentTimer.getTime() / 1000), // ms to s conversion
-      });
       axios.post(route, {
         token,
         channel_id: Number.parseInt(channel_id),
@@ -161,25 +154,29 @@ function AddMessage({ channel_id = -1, dm_id = -1 }) {
     if (standupEndTime > Date.now() / 1000) {
       setStandupRemaining(() => Math.round(standupEndTime - Math.round(Date.now() / 1000)));
     } else {
-      setStandupRemaining()
+      setStandupRemaining();
     }
   }, 1000);
 
   const checkStandupActive = () => {
-    if (channel_id === -1 || standupRemaining > 0) return;
-
+    if (channel_id === -1) return;
     axios
       .get('/standup/active/v1', { params: { token, channel_id } })
       .then(({ data }) => {
         const { is_active = false, time_finish } = data;
         if (is_active && time_finish) {
           setStandupEndTime(time_finish);
+        } else {
+          setStandupRemaining(0);
+          setStandupEndTime(-1);
         }
       })
       .catch((err) => { });
   }
 
   useStep(checkStandupActive, [currentMessage] /* check when user is typing */);
+
+  React.useEffect(checkStandupActive, [channel_id]);
 
   const keyDown = (e) => {
     if (e.key === 'Enter' && !e.getModifierState('Shift')) {
