@@ -18,7 +18,7 @@ function WorkspaceStats() {
       .then(({ data }) => {
         console.log(data);
         const { dreams_stats } = data;
-        setUtilizationRate(dreams_stats['involvement_rate']);
+        setUtilizationRate(dreams_stats['utilization_rate']);
         setChannelsData(dreams_stats['channels_exist'].map((obj) => {
           return { x: new Date(obj['time_stamp'] * 1000), y: obj['num_channels_exist'] };
         }));

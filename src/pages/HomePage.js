@@ -16,6 +16,7 @@ function HomePage() {
               This is SengChat: agile messaging for Software Engineers
             </Typography>
           </div>
+          <br />
           <WorkspaceStats />
         </>
       }
