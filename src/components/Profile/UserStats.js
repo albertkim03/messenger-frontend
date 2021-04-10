@@ -37,7 +37,7 @@ function UserStats() {
   return (
     <>
       <Typography variant="h5">User statistics</Typography>
-      <p>Involvement rate: {involvementRate}</p>
+      <p>Involvement rate: {(involvementRate * 100).toFixed(2)}%</p>
       <Scatter
         data={{
           datasets: [

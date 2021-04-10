@@ -37,7 +37,7 @@ function WorkspaceStats() {
   return (
     <>
       <Typography variant="h5">Workspace statistics</Typography>
-      <p>Utilisation rate: {utilizationRate}</p>
+      <p>Wow! {(utilizationRate * 100).toFixed(2)}% utilisation</p>
       <Scatter
         data={{
           datasets: [
