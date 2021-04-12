@@ -59,7 +59,7 @@ function Profile({ profile }) {
   function updateProfileImgUrl(raw_text, x_start, y_start, x_end, y_end) {
     const items = raw_text.split(',');
     axios
-      .post(`/user/profile/uploadphoto`, {
+      .post(`/user/profile/uploadphoto/v1`, {
         token,
         img_url: items[0],
         x_start: Number.parseInt(items[1]),
