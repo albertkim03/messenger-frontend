@@ -1,4 +1,3 @@
-import axios from 'axios';
 import {
   Avatar,
   Box,
@@ -12,9 +11,10 @@ import {
 } from '@material-ui/core';
 import DeveloperOutlinedIcon from '@material-ui/icons/DeveloperModeOutlined';
 import React from 'react';
-import Placeholder from "../components/Placeholder";
+import Placeholder from '../components/Placeholder';
+import { makeRequest } from '../utils/axios_wrapper';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   '@global': {
     body: {
       backgroundColor: theme.palette.primary.light,
@@ -38,75 +38,77 @@ function ForgotPasswordPage(props) {
     event.preventDefault();
 
     // Get user inputs (TODO:)
-    const reset_code = event.target[0].value;
-    const new_password = event.target[2].value;
+    const resetCode = event.target[0].value;
+    const newPassword = event.target[2].value;
 
     // Quick validation
-    if (!reset_code || !new_password) return;
+    if (!resetCode || !newPassword) {
+      return;
+    }
 
     setLoading(true);
 
     // Send to backend
-    axios.post(`/auth/passwordreset/reset/v1`, { reset_code, new_password })
-      .then((response) => {
-        console.log(response);
-        props.history.push('/login');
-      })
-      .catch((err) => { })
-      .finally(() => setLoading(false));
+    makeRequest('POST', 'AUTH_PASSWORDRESET_RESET', { resetCode, newPassword })
+        .then(response => {
+          console.log(response);
+          props.history.push('/login');
+        })
+        .catch(err => console.log(err))
+        .finally(() => setLoading(false));
   }
 
   const classes = useStyles();
 
   return (
-    <Container component="main" maxWidth="sm">
-      <Box boxShadow={3} className={classes.card}>
-        <Avatar>
-          <DeveloperOutlinedIcon color="secondary" />
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          Reset Password
-        </Typography>
-        {
-          loading
-            ? <div style={{ marginTop: "64px" }}><Placeholder /></div>
-            : <form noValidate onSubmit={handleSubmit}>
-              <TextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                id="reset_code"
-                label="Reset code"
-                name="reset_code"
-                type="text"
-                autoFocus
-              />
-              <TextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                id="new_password"
-                label="New Password"
-                name="new_password"
-                type="password"
-              />
-              <Button type="submit" fullWidth variant="contained" color="primary">
-                Change Password
-                </Button>
-              <Grid container>
-                <Grid item>
-                  <br />
-                  <Link href="/login" variant="body1">
-                    {'Remember your password? Login'}
-                  </Link>
-                </Grid>
-              </Grid>
-            </form>
-        }
-      </Box>
-    </Container>
+      <Container component="main" maxWidth="sm">
+        <Box boxShadow={3} className={classes.card}>
+          <Avatar>
+            <DeveloperOutlinedIcon color="secondary"/>
+          </Avatar>
+          <Typography component="h1" variant="h5">Reset Password</Typography>
+          {loading
+              ? (
+                  <div style={{ marginTop: '64px' }}>
+                    <Placeholder/>
+                  </div>
+              )
+              : (
+                  <form noValidate onSubmit={handleSubmit}>
+                    <TextField
+                        variant="outlined"
+                        margin="normal"
+                        required
+                        fullWidth
+                        id="resetCode"
+                        label="Reset code"
+                        name="resetCode"
+                        type="text"
+                        autoFocus
+                    />
+                    <TextField
+                        variant="outlined"
+                        margin="normal"
+                        required
+                        fullWidth
+                        id="newPassword"
+                        label="New Password"
+                        name="newPassword"
+                        type="password"
+                    />
+                    <Button type="submit" fullWidth variant="contained" color="primary">
+                      Change Password
+                    </Button>
+                    <Grid container>
+                      <Grid item>
+                        <br/>
+                        <Link href="/login" variant="body1">{'Remember your password? Login'}</Link>
+                      </Grid>
+                    </Grid>
+                  </form>
+              )}
+        </Box>
+      </Container>
   );
 }
 

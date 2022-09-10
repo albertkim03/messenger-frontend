@@ -1,81 +1,65 @@
-import React from 'react';
-import axios from 'axios';
-
-import {
-  Badge,
-  IconButton,
-} from '@material-ui/core';
-
+import { Badge, IconButton } from '@material-ui/core';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ThumbUpOutlinedIcon from '@material-ui/icons/ThumbUpOutlined';
-
+import React from 'react';
 import AuthContext from '../../AuthContext';
+import { makeRequest } from '../../utils/axios_wrapper';
 import { StepContext } from '../Channel/ChannelMessages';
 import { StepContextDm } from '../Dm/DmMessages';
 
-function MessageReact({
-  message_id,
-  reacts = [] /* [{ react_id, u_ids }] */,
-}) {
-
+function MessageReact({ messageId, reacts = [] /* [{ reactId, uIds }] */ }) {
   const token = React.useContext(AuthContext);
   let step = React.useContext(StepContext);
   let stepDm = React.useContext(StepContextDm);
-  step = step ? step : () => { }; // sanity check
-  stepDm = stepDm ? stepDm : () => { }; // sanity check
+  step = step ? step : () => {}; // sanity check
+  stepDm = stepDm ? stepDm : () => {}; // sanity check
 
-  const messageReact = (is_reacted) => {
-    if (is_reacted) {
-      axios.post(`/message/unreact/v1`, {
+  const messageReact = isReacted => {
+    if (isReacted) {
+      makeRequest('POST', 'MESSAGE_UNREACT', {
         token,
-        message_id: Number.parseInt(message_id),
-        react_id: 1 /* FIXME */,
-      })
-        .then(() => {
-          step();
-          stepDm();
-        });
+        messageId: Number.parseInt(messageId),
+        reactId: 1,
+      }).then(() => {
+        step();
+        stepDm();
+      }).catch(err => console.log(err));
     } else {
-      axios.post(`/message/react/v1`, {
+      makeRequest('POST', 'MESSAGE_REACT', {
         token,
-        message_id: Number.parseInt(message_id),
-        react_id: 1 /* FIXME */,
-      })
-        .then(() => {
-          step();
-          stepDm();
-        });
+        messageId: Number.parseInt(messageId),
+        reactId: 1,
+      }).then(() => {
+        step();
+        stepDm();
+      }).catch(err => console.log(err));
     }
   };
 
   let thumbUpCount = 0;
-  let is_reacted = false;
-  const thumbUpIndex = reacts.findIndex((react) => react.react_id === 1);
+  let isReacted = false;
+  const thumbUpIndex = reacts.findIndex(react => react.reactId === 1);
   if (thumbUpIndex !== -1) {
-    thumbUpCount = reacts[thumbUpIndex].u_ids.length;
-    is_reacted = reacts[thumbUpIndex].is_this_user_reacted;
+    thumbUpCount = reacts[thumbUpIndex].uIds.length;
+    isReacted = reacts[thumbUpIndex].isThisUserReacted;
   }
 
   return (
-    <Badge
-      anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-      badgeContent={thumbUpCount}
-      color="secondary"
-    >
-      <IconButton
-        onClick={() => messageReact(is_reacted)}
-        style={{ margin: 1 }}
-        size="small"
-        edge="end"
-        aria-label="delete"
+      <Badge
+          anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+          badgeContent={thumbUpCount}
+          color="secondary"
       >
-        {is_reacted ? (
-          <ThumbUpIcon fontSize="small" />
-        ) : (
-          <ThumbUpOutlinedIcon fontSize="small" />
-        )}
-      </IconButton>
-    </Badge>
+        <IconButton
+            onClick={() => messageReact(isReacted)}
+            style={{ margin: 1 }}
+            size="small"
+            edge="end"
+            aria-label="delete"
+        >
+          {isReacted ? <ThumbUpIcon fontSize="small"/> : <ThumbUpOutlinedIcon fontSize="small"/>}
+        </IconButton>
+      </Badge>
   );
 }
 

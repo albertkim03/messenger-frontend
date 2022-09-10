@@ -1,15 +1,12 @@
 import React from 'react';
+import Dm from '../components/Dm';
 import Layout from '../components/Layout';
 import ProfileChannelLists from '../components/ProfileChannelLists';
-import Dm from '../components/Dm';
 
 function DmPage({ match }) {
-  const { dm_id } = match.params;
+  const { dmId } = match.params;
   return (
-    <Layout
-      menu={<ProfileChannelLists channel_id={null} dm_id={dm_id} />}
-      body={<Dm dm_id={dm_id} />}
-    />
+      <Layout menu={<ProfileChannelLists channelId={null} dmId={dmId}/>} body={<Dm dmId={dmId}/>}/>
   );
 }
 

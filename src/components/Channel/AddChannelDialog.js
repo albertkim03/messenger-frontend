@@ -1,22 +1,22 @@
-import React from "react";
-import axios from 'axios';
 import {
+  Button,
   Dialog,
-  DialogTitle,
   DialogActions,
   DialogContent,
   DialogContentText,
+  DialogTitle,
+  FormControlLabel,
+  Grid,
   IconButton,
-  Button,
   Switch,
   TextField,
-  Grid,
-  FormControlLabel,
-} from "@material-ui/core";
-import Visibility from "@material-ui/icons/Visibility";
-import VisibilityOff from "@material-ui/icons/VisibilityOff";
-import Add from "@material-ui/icons/Add";
-import AuthContext from "../../AuthContext";
+} from '@material-ui/core';
+import Add from '@material-ui/icons/Add';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
+import React from 'react';
+import AuthContext from '../../AuthContext';
+import { makeRequest } from '../../utils/axios_wrapper';
 
 function AddChannelDialog({ ...props }) {
   const [open, setOpen] = React.useState(false);
@@ -31,78 +31,59 @@ function AddChannelDialog({ ...props }) {
     event.preventDefault();
     const name = event.target[0].value;
     const secret = event.target[1].checked;
-    const is_public = !secret;
+    const isPublic = !secret;
 
-    if (!name) return;
+    if (!name) {
+      return;
+    }
 
-    axios
-      .post(`/channels/create/v2`, { token, name, is_public })
-      .then(response => {
-        console.log(response);
-        props.callback();
-      })
-      .catch(err => { });
+    makeRequest('POST', 'CHANNELS_CREATE', { token, name, isPublic })
+        .then(response => {
+          console.log(response);
+          props.callback();
+        })
+        .catch(err => console.log(err));
   }
+
   return (
-    <div>
-      <IconButton size="small" onClick={handleClickOpen}>
-        <Add />
-      </IconButton>
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="form-dialog-title"
-      >
-        <DialogTitle id="form-dialog-title">Create Channel</DialogTitle>
-        <form onSubmit={handleSubmit}>
-          <DialogContent>
-            <DialogContentText>
-              Complete the form below to create a new channel
-            </DialogContentText>
-            <Grid
-              container
-              spacing={2}
-              direction="row"
-              justify="center"
-              alignItems="center"
-            >
-              <Grid item xs={12}>
-                <TextField
-                  autoFocus
-                  margin="dense"
-                  id="channel_name"
-                  label="Channel Name"
-                  name="channel_name"
-                  fullWidth
-                />
+      <div>
+        <IconButton size="small" onClick={handleClickOpen}>
+          <Add/>
+        </IconButton>
+        <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+          <DialogTitle id="form-dialog-title">Create Channel</DialogTitle>
+          <form onSubmit={handleSubmit}>
+            <DialogContent>
+              <DialogContentText>Complete the form below to create a new channel</DialogContentText>
+              <Grid container spacing={2} direction="row" justify="center" alignItems="center">
+                <Grid item xs={12}>
+                  <TextField
+                      autoFocus
+                      margin="dense"
+                      id="channelName"
+                      label="Channel Name"
+                      name="channelName"
+                      fullWidth
+                  />
+                </Grid>
+                <Grid container item justify="center" alignItems="center">
+                  <Visibility/>
+                  <FormControlLabel
+                      control={<Switch value="secret" inputProps={{ 'aria-label': 'Secret' }}/>}
+                      label="Secret"
+                      labelPlacement="top"
+                  />
+                  <VisibilityOff/>
+                </Grid>
               </Grid>
-              <Grid container item justify="center" alignItems="center">
-                <Visibility />
-                <FormControlLabel
-                  control={
-                    <Switch
-                      value="secret"
-                      inputProps={{ "aria-label": "Secret" }}
-                    />
-                  }
-                  label="Secret"
-                  labelPlacement="top"
-                />
-                <VisibilityOff />
-              </Grid>
-            </Grid>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose} color="primary">
-              Cancel
-            </Button>
-            <Button onClick={handleClose} type="submit" color="primary">
-              Create
-            </Button>
-          </DialogActions>
-        </form>
-      </Dialog>
-    </div>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleClose} color="primary">Cancel</Button>
+              <Button onClick={handleClose} type="submit" color="primary">Create</Button>
+            </DialogActions>
+          </form>
+        </Dialog>
+      </div>
   );
 }
 

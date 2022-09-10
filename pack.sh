@@ -1,4 +1,3 @@
 #!/bin/sh
-rm -r prebundle
+rm -r build
 npm run-script build
-mv build prebundle

@@ -1,4 +1,3 @@
-import axios from 'axios';
 import {
   Avatar,
   Box,
@@ -14,8 +13,9 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import React from 'react';
 import '../App.css';
 import Placeholder from '../components/Placeholder';
+import { makeRequest } from '../utils/axios_wrapper';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   '@global': {
     body: {
       backgroundColor: theme.palette.primary.light,
@@ -33,7 +33,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function LoginPage({ setAuth, ...props }) {
-
   const [loading, setLoading] = React.useState(false);
 
   function handleSubmit(event) {
@@ -44,84 +43,87 @@ function LoginPage({ setAuth, ...props }) {
     const password = event.target[2].value;
 
     // Quick validation
-    if (!email || !password) return;
+    if (!email || !password) {
+      return;
+    }
 
     setLoading(true);
 
     // Send to backend
-    axios.post(`/auth/login/v2`, { email, password })
-      .then((response) => {
-        console.log(response);
-        const data = response.data;
-        setAuth(data.token, data.auth_user_id);
-        props.history.push('/');
-      })
-      .catch((err) => { })
-      .finally(() => setLoading(false));
+    makeRequest('POST', 'AUTH_LOGIN', { email, password })
+        .then(response => {
+          console.log(response);
+          const data = response.data;
+          setAuth(data.token, data.authUserId);
+          props.history.push('/');
+        })
+        .catch(err => console.log(err))
+        .finally(() => setLoading(false));
   }
 
   const classes = useStyles();
 
   return (
-    <Container component="main" maxWidth="sm">
-      <Box boxShadow={3} className={classes.card}>
-        <Avatar>
-          <LockOutlinedIcon />
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          Login
-        </Typography>
-        {
-          loading
-            ? <div style={{ marginTop: "64px" }}><Placeholder /></div>
-            : <form noValidate onSubmit={handleSubmit}>
-              <TextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                id="email"
-                label="Email"
-                name="email"
-                type="text"
-                autoFocus
-              />
-              <TextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-              />
-              <div className="password-warning">
-                Passwords are not securely stored.<br />
-                  Do not enter any currently used passwords.
-                </div>
-              <Button type="submit" fullWidth variant="contained" color="primary">
-                Sign In
-                </Button>
-              <Grid container direction="column" alignItems="center">
-                <Grid item>
-                  <br />
-                  <Link href="/register" variant="body1">
-                    {"Don't have an account? Register"}
-                  </Link>
-                </Grid>
-                <Grid item>
-                  <br />
-                  <Link href="/forgot_password" variant="body1">
-                    Forgot password?
-                    </Link>
-                </Grid>
-              </Grid>
-            </form>
-        }
-      </Box>
-    </Container>
+      <Container component="main" maxWidth="sm">
+        <Box boxShadow={3} className={classes.card}>
+          <Avatar>
+            <LockOutlinedIcon/>
+          </Avatar>
+          <Typography component="h1" variant="h5">Login</Typography>
+          {loading
+              ? (
+                  <div style={{ marginTop: '64px' }}>
+                    <Placeholder/>
+                  </div>
+              )
+              : (
+                  <form noValidate onSubmit={handleSubmit}>
+                    <TextField
+                        variant="outlined"
+                        margin="normal"
+                        required
+                        fullWidth
+                        id="email"
+                        label="Email"
+                        name="email"
+                        type="text"
+                        autoFocus
+                    />
+                    <TextField
+                        variant="outlined"
+                        margin="normal"
+                        required
+                        fullWidth
+                        name="password"
+                        label="Password"
+                        type="password"
+                        id="password"
+                        autoComplete="current-password"
+                    />
+                    <div className="password-warning">
+                      Passwords are not securely stored.
+                      <br/>
+                      Do not enter any currently used passwords.
+                    </div>
+                    <Button type="submit" fullWidth variant="contained" color="primary">
+                      Sign In
+                    </Button>
+                    <Grid container direction="column" alignItems="center">
+                      <Grid item>
+                        <br/>
+                        <Link href="/register" variant="body1">
+                          {"Don't have an account? Register"}
+                        </Link>
+                      </Grid>
+                      <Grid item>
+                        <br/>
+                        <Link href="/forgot_password" variant="body1">Forgot password?</Link>
+                      </Grid>
+                    </Grid>
+                  </form>
+              )}
+        </Box>
+      </Container>
   );
 }
 

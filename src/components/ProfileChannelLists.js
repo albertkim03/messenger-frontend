@@ -1,15 +1,15 @@
 import React from 'react';
-import ProfileList from './ProfileList';
 import ChannelList from './ChannelList';
 import DmList from './DmList';
+import ProfileList from './ProfileList';
 
-function ProfileChannelLists({ channel_id, dm_id }) {
+function ProfileChannelLists({ channelId, dmId }) {
   return (
-    <>
-      <ProfileList />
-      <ChannelList channel_id={channel_id} />
-      <DmList dm_id={dm_id} />
-    </>
+      <>
+        <ProfileList/>
+        <ChannelList channelId={channelId}/>
+        <DmList dmId={dmId}/>
+      </>
   );
 }
 

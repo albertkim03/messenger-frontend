@@ -1,32 +1,34 @@
 # How to run the frontend
 
-## The simple way
+## The easiest way (with npm) -- RECOMMENDED
 
+Run this once on the machine.
 ```bash
-python3 frontend.py [BACKEND PORT]
+npm install
 ```
+
+Start up your backend on a specific port.
+
+Then run:
+```bash
+bash run-easy.sh [ITERATION] [BACKEND PORT]
+```
+and navigate to http://localhost:3000 to see the frontend.
 
 For example:
-
 ```bash
-python3 frontend.py 5000
+bash run-easy.sh 2 5000
 ```
 
-The backend port is just an integer that is the port the flask server is CURRENTLY running on.
-
-
-Once you have deployed your backend, update line 8 in frontend.py to contain your deployed backend url. For example, for a url `https://example.alwaysdata.net`, line 8 should be:
-```python
-f.write('var DEPLOYED_URL = "https://example.alwaysdata.net";')
+Once you have deployed your backend, update line 4 in `run-easy.sh` to contain your deployed backend url. For example, for a url `https://example.alwaysdata.net`, line 4 should be:
+```bash
+echo "var DEPLOYED_URL = 'https://example.alwaysdata.net'" >> build/config.js
 ```
 
 To utilise this deployed backend, run:
 ```bash
-python3 frontend.py 0
+bash run-easy.sh 3 0
 ```
-
-
-<hr>
 
 ## The complex way
 
@@ -41,12 +43,12 @@ Start up your backend on a specific port.
 
 Then run:
 ```bash
-./run.sh [BACKEND PORT] [FRONTEND PORT]
+bash run.sh [ITERATION] [BACKEND PORT] [FRONTEND PORT]
 ```
 
 For example:
 ```bash
-./run.sh 5000 12345
+bash run.sh 2 5000 12345
 ```
 
 Once you have deployed your backend, update line 4 in src/utils/constants.js to contain your deployed backend url. For example, for a url `https://example.alwaysdata.net`, line 4 should be:
@@ -56,5 +58,5 @@ let deployedUrl = "https://example.alwaysdata.net";
 
 To utilise this deployed backend, run:
 ```bash
-./run.sh 0 [FRONTEND PORT]
+./run.sh 3 0 [FRONTEND PORT]
 ```

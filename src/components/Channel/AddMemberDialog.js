@@ -1,20 +1,19 @@
-import React from 'react';
-import axios from 'axios';
-
 import {
+  Button,
   Dialog,
-  DialogTitle,
   DialogActions,
   DialogContent,
+  DialogContentText,
+  DialogTitle,
   MenuItem,
   Select,
-  DialogContentText,
-  Button,
 } from '@material-ui/core';
+import React from 'react';
 import AuthContext from '../../AuthContext';
+import { makeRequest } from '../../utils/axios_wrapper';
 import { useStep } from '../../utils/update';
 
-function AddMemberDialog({ channel_id, ...props }) {
+function AddMemberDialog({ channelId, ...props }) {
   const [open, setOpen] = React.useState(false);
   const [selectedUser, setSelectedUser] = React.useState('');
   const [users, setUsers] = React.useState([]);
@@ -23,23 +22,16 @@ function AddMemberDialog({ channel_id, ...props }) {
 
   const step = useStep();
 
-
-  function fetchUserData() {
-    axios
-      .get('/users/all/v1', {
-        params: {
-          token,
-        },
-      })
-      .then(({ data }) => {
-        setUsers(data['users']);
-      })
-      .catch((err) => { });
-  }
-
   React.useEffect(() => {
+    function fetchUserData() {
+      makeRequest('GET', 'USERS_ALL', { token })
+          .then(({ data }) => {
+            setUsers(data['users']);
+          })
+          .catch(err => console.log(err));
+    }
     fetchUserData();
-  }, []);
+  }, [token]);
 
   const handleUserSelect = event => {
     const newUserId = parseInt(event.target.value, 10);
@@ -54,54 +46,47 @@ function AddMemberDialog({ channel_id, ...props }) {
   }
   function handleSubmit(event) {
     event.preventDefault();
-    const u_id = selectedUser;
+    const uId = selectedUser;
 
-    if (u_id == null) return;
+    if (uId == null) {
+      return;
+    }
 
-    axios.post(`/channel/invite/v2`, {
-      token,
-      u_id: Number.parseInt(u_id),
-      channel_id: Number.parseInt(channel_id),
-    })
-      .then((response) => {
-        console.log(response);
-        step();
-      })
-      .catch((err) => { });
+    makeRequest('POST', 'CHANNEL_INVITE', { token, uId, channelId })
+        .then(response => {
+          console.log(response);
+          step();
+        })
+        .catch(err => console.log(err));
   }
   return (
-    <div>
-      <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-        Invite Member
-      </Button>
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="form-dialog-title"
-      >
-        <DialogTitle id="form-dialog-title">Invite User</DialogTitle>
-        <form onSubmit={handleSubmit}>
-          <DialogContent>
-            <DialogContentText>
-              Select a user below to invite them to this channel
-            </DialogContentText>
-            <Select style={{ width: "100%" }} id="u_id" onChange={handleUserSelect} value={selectedUser}>
-              {users.map((d, idx) => {
-                return <MenuItem key={d.u_id} value={d.u_id}>{d.name_first} {d.name_last}</MenuItem>
-              })}
-            </Select>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose} color="primary">
-              Cancel
-            </Button>
-            <Button onClick={handleClose} type="submit" color="primary">
-              Invite
-            </Button>
-          </DialogActions>
-        </form>
-      </Dialog>
-    </div>
+      <div>
+        <Button variant="outlined" color="primary" onClick={handleClickOpen}>Invite Member</Button>
+        <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+          <DialogTitle id="form-dialog-title">Invite User</DialogTitle>
+          <form onSubmit={handleSubmit}>
+            <DialogContent>
+              <DialogContentText>
+                Select a user below to invite them to this channel
+              </DialogContentText>
+              <Select
+                  style={{ width: '100%' }}
+                  id="uId"
+                  onChange={handleUserSelect}
+                  value={selectedUser}
+              >
+                {users.map((d, idx) => {
+                  return <MenuItem key={d.uId} value={d.uId}>{d.nameFirst} {d.nameLast}</MenuItem>;
+                })}
+              </Select>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleClose} color="primary">Cancel</Button>
+              <Button onClick={handleClose} type="submit" color="primary">Invite</Button>
+            </DialogActions>
+          </form>
+        </Dialog>
+      </div>
   );
 }
 

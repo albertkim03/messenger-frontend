@@ -1,71 +1,50 @@
-import React from 'react';
-import axios from 'axios';
-import { Link } from 'react-router-dom';
-
-import {
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  ListSubheader,
-} from '@material-ui/core';
-
+import { List, ListItem, ListItemIcon, ListItemText, ListSubheader } from '@material-ui/core';
 import RadioButtonCheckedIcon from '@material-ui/icons/RadioButtonChecked';
 import RadioButtonUncheckedIcon from '@material-ui/icons/RadioButtonUnchecked';
+import { makeRequest } from '../utils/axios_wrapper';
+import React from 'react';
+import { Link } from 'react-router-dom';
 import AuthContext from '../AuthContext';
+import { useStep } from '../utils/update';
 import AddDmDialog from './Dm/AddDmDialog';
 
-import { useStep } from '../utils/update';
-
-function DmList({ dm_id: curr_dm_id }) {
+function DmList({ dmId: currDmId }) {
   const [myDms, setMyDms] = React.useState([]);
 
   const token = React.useContext(AuthContext);
 
   const fetchDmsData = () => {
-    axios
-      .get('/dm/list/v1', {
-        params: {
-          token,
-        },
-      })
-      .then(({ data }) => {
-        setMyDms(data['dms']);
-      })
-      .catch((err) => { });
+    makeRequest('GET', 'DM_LIST', { token })
+        .then(({ data }) => {
+          setMyDms(data['dms']);
+        })
+        .catch(err => console.log(err));
   };
 
   useStep(fetchDmsData, [], 2);
 
   return (
-    <>
-      <List
-        subheader={
-          <ListSubheader style={{ display: 'flex' }}>
-            <span style={{ flex: 1 }}>My Dms</span>
-            <AddDmDialog callback={fetchDmsData} />
-          </ListSubheader>
-        }
-      >
-        {myDms.map(({ dm_id, name }) => (
-          <ListItem
-            button
-            key={dm_id}
-            component={Link}
-            to={`/dm/${dm_id}`}
-          >
-            <ListItemIcon>
-              {dm_id == curr_dm_id ? (
-                <RadioButtonCheckedIcon />
-              ) : (
-                <RadioButtonUncheckedIcon />
-              )}
-            </ListItemIcon>
-            <ListItemText primary={name} />
-          </ListItem>
-        ))}
-      </List>
-    </>
+      <>
+        <List
+            subheader={(
+                <ListSubheader style={{ display: 'flex' }}>
+                  <span style={{ flex: 1 }}>My Dms</span>
+                  <AddDmDialog callback={fetchDmsData}/>
+                </ListSubheader>
+            )}
+        >
+          {myDms.map(({ dmId, name }) => (
+              <ListItem button key={dmId} component={Link} to={`/dm/${dmId}`}>
+                <ListItemIcon>
+                  {dmId == currDmId
+                      ? <RadioButtonCheckedIcon/>
+                      : <RadioButtonUncheckedIcon/>}
+                </ListItemIcon>
+                <ListItemText primary={name}/>
+              </ListItem>
+          ))}
+        </List>
+      </>
   );
 }
 

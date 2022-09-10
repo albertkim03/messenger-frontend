@@ -6,9 +6,9 @@ function ProtectedRoute(props) {
   const token = React.useContext(AuthContext);
   console.log(token);
   if (!token) {
-    return <Redirect to="/login" />;
+    return <Redirect to="/login"/>;
   }
-  return <Route {...props} />;
+  return <Route {...props}/>;
 }
 
 export default ProtectedRoute;

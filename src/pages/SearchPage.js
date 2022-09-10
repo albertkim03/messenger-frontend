@@ -4,13 +4,8 @@ import ProfileChannelLists from '../components/ProfileChannelLists';
 import Search from '../components/Search';
 
 function SearchPage({ match }) {
-  const { query_str="" } = match.params;
-  return (
-    <Layout
-      menu={<ProfileChannelLists />}
-      body={<Search query_str={query_str} />}
-    />
-  );
+  const { queryStr = '' } = match.params;
+  return <Layout menu={<ProfileChannelLists/>} body={<Search queryStr={queryStr}/>}/>;
 }
 
 export default SearchPage;

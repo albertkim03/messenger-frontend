@@ -1,4 +1,3 @@
-import axios from 'axios';
 import {
   Avatar,
   Box,
@@ -12,9 +11,10 @@ import {
 } from '@material-ui/core';
 import DeveloperOutlinedIcon from '@material-ui/icons/DeveloperModeOutlined';
 import React from 'react';
-import Placeholder from "../components/Placeholder";
+import Placeholder from '../components/Placeholder';
+import { makeRequest } from '../utils/axios_wrapper';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   '@global': {
     body: {
       backgroundColor: theme.palette.primary.light,
@@ -41,61 +41,63 @@ function ForgotPasswordPage(props) {
     const email = event.target[0].value;
 
     // Quick validation
-    if (!email) return;
+    if (!email) {
+      return;
+    }
 
     setLoading(true);
 
     // Send to backend
-    axios.post(`/auth/passwordreset/request/v1`, { email })
-      .then((response) => {
-        console.log(response);
-        props.history.push('/reset_password');
-      })
-      .catch((err) => { })
-      .finally(() => setLoading(false));
+    makeRequest('POST', 'AUTH_PASSWORDRESET_REQUEST', { email })
+        .then(response => {
+          console.log(response);
+          props.history.push('/reset_password');
+        })
+        .catch(err => console.log(err))
+        .finally(() => setLoading(false));
   }
 
   const classes = useStyles();
 
   return (
-    <Container component="main" maxWidth="sm">
-      <Box boxShadow={3} className={classes.card}>
-        <Avatar>
-          <DeveloperOutlinedIcon color="secondary" />
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          Forgot Password
-        </Typography>
-        {
-          loading
-            ? <div style={{ marginTop: "64px" }}><Placeholder /></div>
-            : <form noValidate onSubmit={handleSubmit}>
-              <TextField
-                variant="outlined"
-                margin="normal"
-                required
-                fullWidth
-                id="email"
-                label="Email"
-                name="email"
-                type="email"
-                autoFocus
-              />
-              <Button type="submit" fullWidth variant="contained" color="primary">
-                Send Recovery Email
-                </Button>
-              <Grid container>
-                <Grid item>
-                  <br />
-                  <Link href="/login" variant="body1">
-                    {'Remember your password? Login'}
-                  </Link>
-                </Grid>
-              </Grid>
-            </form>
-        }
-      </Box>
-    </Container>
+      <Container component="main" maxWidth="sm">
+        <Box boxShadow={3} className={classes.card}>
+          <Avatar>
+            <DeveloperOutlinedIcon color="secondary"/>
+          </Avatar>
+          <Typography component="h1" variant="h5">Forgot Password</Typography>
+          {loading
+              ? (
+                  <div style={{ marginTop: '64px' }}>
+                    <Placeholder/>
+                  </div>
+              )
+              : (
+                  <form noValidate onSubmit={handleSubmit}>
+                    <TextField
+                        variant="outlined"
+                        margin="normal"
+                        required
+                        fullWidth
+                        id="email"
+                        label="Email"
+                        name="email"
+                        type="email"
+                        autoFocus
+                    />
+                    <Button type="submit" fullWidth variant="contained" color="primary">
+                      Send Recovery Email
+                    </Button>
+                    <Grid container>
+                      <Grid item>
+                        <br/>
+                        <Link href="/login" variant="body1">{'Remember your password? Login'}</Link>
+                      </Grid>
+                    </Grid>
+                  </form>
+              )}
+        </Box>
+      </Container>
   );
 }
 

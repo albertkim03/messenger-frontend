@@ -1,8 +1,8 @@
-import React from 'react';
-import Edit from '@material-ui/icons/Edit';
-import Cancel from '@material-ui/icons/Cancel';
-import Save from '@material-ui/icons/Save';
 import { Grid } from '@material-ui/core';
+import Cancel from '@material-ui/icons/Cancel';
+import Edit from '@material-ui/icons/Edit';
+import Save from '@material-ui/icons/Save';
+import React from 'react';
 
 function EditableFields({
   editable,
@@ -13,7 +13,6 @@ function EditableFields({
   onSave,
   ...props
 }) {
-
   const [edit, setEdit] = React.useState(false);
   const [prevMasterValue, setPrevMasterValue] = React.useState();
   const [currMasterValue, setCurrMasterValue] = React.useState(masterValue);
@@ -33,40 +32,46 @@ function EditableFields({
   }
 
   function icons() {
-    if (!editable) return null;
+    if (!editable) {
+      return null;
+    }
     if (edit) {
       return (
-        <>
-          <Save
-            style={{ cursor: 'pointer' }}
-            onClick={() => {
-              if (currMasterValue == null) return;
-              if (onSave) {
-                if (currSlaveValues) {
-                  onSave(currMasterValue, ...currSlaveValues);
-                } else {
-                  onSave(currMasterValue);
-                }
-              }
-              toggleEdit();
-            }}
-          />
-          <Cancel
-            style={{ cursor: 'pointer' }}
-            onClick={() => {
-              setCurrMasterValue(prevMasterValue);
-              setCurrSlaveValues(prevSlaveValues);
-              toggleEdit();
-            }}
-          />
-        </>
+          <>
+            <Save
+                style={{ cursor: 'pointer' }}
+                onClick={() => {
+                  if (currMasterValue == null) {
+                    return;
+                  }
+                  if (onSave) {
+                    if (currSlaveValues) {
+                      onSave(currMasterValue, ...currSlaveValues);
+                    } else {
+                      onSave(currMasterValue);
+                    }
+                  }
+                  toggleEdit();
+                }}
+            />
+            <Cancel
+                style={{ cursor: 'pointer' }}
+                onClick={() => {
+                  setCurrMasterValue(prevMasterValue);
+                  setCurrSlaveValues(prevSlaveValues);
+                  toggleEdit();
+                }}
+            />
+          </>
       );
     }
-    return <Edit style={{ cursor: 'pointer' }} onClick={toggleEdit} />;
+    return <Edit style={{ cursor: 'pointer' }} onClick={toggleEdit}/>;
   }
   function onSlaveChange(event, valueIndex) {
     let copySlaves = currSlaveValues.map((val, idx) => {
-      if (idx === valueIndex) return event.target.value;
+      if (idx === valueIndex) {
+        return event.target.value;
+      }
       return val;
     });
     setCurrSlaveValues(copySlaves);
@@ -77,28 +82,27 @@ function EditableFields({
   }
 
   return (
-    <Grid container spacing={1} alignItems="flex-end">
-      {slaves &&
-        slaves.map((slave, idx) => {
+      <Grid container spacing={1} alignItems="flex-end">
+        {slaves && slaves.map((slave, idx) => {
           return (
-            <Grid item key={idx}>
-              {slave({
-                value: currSlaveValues[idx] || "", // "" required for label placeholder mechanics
-                InputProps: { readOnly: !edit },
-                onChange: (event) => onSlaveChange(event, idx),
-              })}
-            </Grid>
+              <Grid item key={idx}>
+                {slave({
+                  value: currSlaveValues[idx] || '', // "" required for label placeholder mechanics
+                  InputProps: { readOnly: !edit },
+                  onChange: event => onSlaveChange(event, idx),
+                })}
+              </Grid>
           );
         })}
-      <Grid item>
-        {master({
-          value: currMasterValue || "", // "" required for label placeholder mechanics
-          InputProps: { readOnly: !edit },
-          onChange: onMasterChange,
-        })}
+        <Grid item>
+          {master({
+            value: currMasterValue || '', // "" required for label placeholder mechanics
+            InputProps: { readOnly: !edit },
+            onChange: onMasterChange,
+          })}
+        </Grid>
+        {editable && <Grid item>{icons()}</Grid>}
       </Grid>
-      {editable && <Grid item>{icons()}</Grid>}
-    </Grid>
   );
 }
 

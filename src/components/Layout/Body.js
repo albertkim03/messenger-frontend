@@ -1,8 +1,8 @@
-import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import React from 'react';
 import { drawerWidth } from '../../utils/constants';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   body: {
     [theme.breakpoints.up('sm')]: {
       width: `calc(100% - ${drawerWidth}px)`,
@@ -15,11 +15,11 @@ const useStyles = makeStyles((theme) => ({
 function Body({ children }) {
   const classes = useStyles();
   return (
-    <div className={classes.body}>
-      {/* Padding */}
-      <div className={classes.toolbar} />
-      {children}
-    </div>
+      <div className={classes.body}>
+        {/* Padding */}
+        <div className={classes.toolbar}/>
+        {children}
+      </div>
   );
 }
 
