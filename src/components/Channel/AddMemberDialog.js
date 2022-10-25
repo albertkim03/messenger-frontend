@@ -52,7 +52,7 @@ function AddMemberDialog({ channelId, ...props }) {
       return;
     }
 
-    makeRequest('POST', 'CHANNEL_INVITE', { token, uId, channelId })
+    makeRequest('POST', 'CHANNEL_INVITE', { token, uId, channelId: Number.parseInt(channelId) })
         .then(response => {
           console.log(response);
           step();
