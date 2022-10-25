@@ -54,7 +54,7 @@ function Channel({ channelId, ...props }) {
   useStep(fetchChannelData, [channelId, token], 2);
 
   function joinChannel(channelId, token) {
-    makeRequest('POST', 'CHANNEL_JOIN', { token, channelId })
+    makeRequest('POST', 'CHANNEL_JOIN', { token, channelId: Number.parseInt(channelId) })
         .then(() => {
           fetchChannelData(channelId, token);
         })
@@ -62,7 +62,7 @@ function Channel({ channelId, ...props }) {
   }
 
   function leaveChannel(channelId, token) {
-    makeRequest('POST', 'CHANNEL_LEAVE', { token, channelId })
+    makeRequest('POST', 'CHANNEL_LEAVE', { token, channelId: Number.parseInt(channelId) })
         .then(() => {
           fetchChannelData(channelId, token);
         })
@@ -70,7 +70,7 @@ function Channel({ channelId, ...props }) {
   }
 
   function addOwner(uId) {
-    makeRequest('POST', 'CHANNEL_ADDOWNER', { token, channelId, uId })
+    makeRequest('POST', 'CHANNEL_ADDOWNER', { token, channelId: Number.parseInt(channelId), uId })
         .then(() => {
           fetchChannelData(channelId, token);
         })
@@ -78,7 +78,7 @@ function Channel({ channelId, ...props }) {
   }
 
   function removeOwner(uId) {
-    makeRequest('POST', 'CHANNEL_REMOVEOWNER', { token, channelId, uId })
+    makeRequest('POST', 'CHANNEL_REMOVEOWNER', { token, channelId: Number.parseInt(channelId), uId })
         .then(() => {
           fetchChannelData(channelId, token);
         })
