@@ -15,7 +15,7 @@ import ResetPasswordPage from './pages/ResetPasswordPage';
 import SearchPage from './pages/SearchPage';
 
 function App() {
-  document.title = 'UNSW Treats';
+  document.title = 'UNSW Memes';
 
   const [authDetails, setAuthDetails] = React.useState(localStorage.getItem('token'));
 

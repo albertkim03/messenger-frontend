@@ -63,7 +63,7 @@ function Header({ handleMenuToggle = () => {} }) {
                   <MenuIcon/>
                 </IconButton>
                 <Link to="/" style={{ color: 'white', textDecoration: 'none' }}>
-                  <Typography variant="h5" noWrap>Treats</Typography>
+                  <Typography variant="h5" noWrap>Memes</Typography>
                 </Link>
               </>
           )}
